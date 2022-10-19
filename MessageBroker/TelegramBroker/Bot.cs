@@ -43,7 +43,7 @@ namespace MessageBroker.TelegramBroker
                     if (message!.Text?.ToLower() == "/start")
                     {
                         //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat, "", cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(message.Chat, "Your chat id: "+chatId, cancellationToken: cancellationToken);
                         return;
                     }
 
@@ -132,6 +132,11 @@ namespace MessageBroker.TelegramBroker
         public void Start()
         {
             Main();
+        }
+
+        public async void SendMessageIntoClient(long telegramId, string message)
+        {
+            await _botClient.SendTextMessageAsync(telegramId, message);
         }
     }
 }

@@ -16,5 +16,13 @@ namespace WPFUI.ExtentionMethods
             return (from goods in goodsList
                 select new WPFUI.Models.Goods(goods.Name, goods.Count, goods.MinCount, goods.Price)).ToList();
         }
+        public static DataTransferWrapper.Models.Goods Convert(this WPFUI.Models.Goods goods)
+        {
+            return new DataTransferWrapper.Models.Goods(goods.Name, goods.Count, goods.MinCount, goods.Price);
+        }
+        public static WPFUI.Models.Goods Convert(this DataTransferWrapper.Models.Goods goods)
+        {
+            return new WPFUI.Models.Goods(goods.Name,goods.Count,goods.MinCount,goods.Price);
+        }
     }
 }

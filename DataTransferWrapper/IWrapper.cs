@@ -13,5 +13,6 @@ namespace DataTransferWrapper
         T GetBy(KeyType key);
         List<T> GetAll();
         void Update(KeyType key,T value);
+        void Sort();
     }
 }

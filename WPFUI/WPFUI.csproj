@@ -8,15 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="MaterialDesignThemes.Wpf" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DataTransferWrapper\DataTransferWrapper.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="PartialViews\ProvidersVoews\" />
+    <ProjectReference Include="..\MessageBroker\MessageBroker.csproj" />
   </ItemGroup>
 
 </Project>

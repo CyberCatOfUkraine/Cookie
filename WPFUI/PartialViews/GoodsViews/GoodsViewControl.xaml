@@ -22,7 +22,7 @@
                 <DataGridTemplateColumn Width="1*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Style="{Binding MaterialDesignRaisedAccentButton}" Click="DelBtn_OnClick" VerticalAlignment="Center" HorizontalAlignment="Center">Видалити</Button>
+                            <Button Click="DelBtn_OnClick" VerticalAlignment="Center" HorizontalAlignment="Center">Видалити</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -39,7 +39,6 @@ namespace WPFUI.PartialViews.GoodsViews
         private void CancelBtn_OnClick(object sender, RoutedEventArgs e)
         {
             CloseDialogControl();
-            MessageBox.Show("canceled!");
         }
 
         private void CloseDialogControl()

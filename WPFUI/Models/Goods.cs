@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WPFUI.Models
 {
-    internal class Goods
+    public class Goods
     {
         public Goods(string name, int count, int minCount, decimal price)
         {

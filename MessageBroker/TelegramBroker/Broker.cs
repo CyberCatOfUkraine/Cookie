@@ -11,6 +11,13 @@ namespace MessageBroker.TelegramBroker
             Bot bot = new Bot();
             bot.Start();
         }
+
+        public void DeliverThisMessage(long TelegramID, string Message)
+        {
+            Bot bot = new Bot();
+            bot.Start();
+            bot.SendMessageIntoClient(TelegramID, Message);
+        }
     }
 
 }

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="WPFUI.PartialViews.ProvidersViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUI.PartialViews"
+             mc:Ignorable="d" 
+              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+
+             d:DesignHeight="600" d:DesignWidth="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid Margin="5" x:Name="ProviderDataGrid" AutoGenerateColumns="False" VerticalScrollBarVisibility="Auto">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Постачальник"           Width="*"    Binding="{Binding Path=Name}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Товари"       Width="0.5*" Binding="{Binding Path=GoodsListText}" IsReadOnly="True"/>
+                <DataGridTemplateColumn Width="1*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="ChangeBtn_OnClick" VerticalAlignment="Center" HorizontalAlignment="Center">Редагувати</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="1*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="DelBtn_OnClick" VerticalAlignment="Center" HorizontalAlignment="Center">Видалити</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=" Telegram: " />
+                        <TextBlock Text="{Binding Path=TelegramId}" />
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+        <Grid Grid.Row="1">
+            <Button Name="AddBtn" Style="{DynamicResource MaterialDesignRaisedAccentButton}" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Width="190" 
+                    Background="AntiqueWhite" Click="AddBtn_OnClick"
+            >Додати постачальника</Button>
+        </Grid>
+        <materialDesign:DialogHost Grid.Row="0" Grid.RowSpan="2" Name="ProviderDialogHost" DialogClosing="GoodsDialogHost_OnDialogClosing"/>
+    </Grid>
+</UserControl>

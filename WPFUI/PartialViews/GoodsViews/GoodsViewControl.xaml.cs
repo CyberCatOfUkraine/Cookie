@@ -27,35 +27,11 @@ namespace WPFUI.PartialViews
     {
         GoodsWrapper wrapper = new ();
         private List<Goods> goodsList;
-        private static bool goodsListInitialized=false;
-        void InitiateGoodsList()
-        {
-            wrapper.Add(new("1s", 2, 3, 4));
-            wrapper.Add(new("11s", 21, 31, 14));
-            wrapper.Add(new("12s", 22, 32, 24));
-            wrapper.Add(new("13s", 23, 33, 34));
-            wrapper.Add(new("14s", 42, 42, 44));
-            wrapper.Add(new("15s", 52, 52, 54));
-            wrapper.Add(new("16s", 62, 62, 64));
-            wrapper.Add(new("17s", 72, 72, 74));
-            wrapper.Add(new("18s", 82, 82, 84));
-            wrapper.Add(new("19s", 92, 92, 94));
-            wrapper.Add(new("20s", 22, 23, 24));
-            wrapper.Add(new("21s", 82, 82, 84));
-            wrapper.Add(new("22s", 82, 82, 84));
-            wrapper.Add(new("23s", 82, 82, 84));
-            wrapper.Add(new("24s", 82, 82, 84));
-        }
 
         public GoodsViewControl()
         {
             InitializeComponent();
-            if (wrapper.Length==0&&!goodsListInitialized)
-            {
-                InitiateGoodsList();
-                wrapper.Sort();
-                goodsListInitialized = true;
-            }
+
             goodsList = wrapper.GetAll().Convert();
             GoodsDataGrid.ItemsSource = goodsList;
         }

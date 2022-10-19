@@ -7,6 +7,15 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
     <Grid>
-      
-    </Grid>
+        <DataGrid Margin="25" x:Name="GoodsStatisticDataGrid" AutoGenerateColumns="False"
+                  VerticalScrollBarVisibility="Auto"
+        >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Назва" Width="*"    Binding="{Binding Path=Name}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Кількість" Width="*"    Binding="{Binding Path=Count}"  IsReadOnly="True"/>
+                <DataGridTextColumn Header="Мінімальна кількість" Width="*"    Binding="{Binding Path=MinCount}"  IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+</Grid>
 </UserControl>
