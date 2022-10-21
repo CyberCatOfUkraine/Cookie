@@ -39,11 +39,12 @@ namespace MessageBroker.TelegramBroker
                 {
                     var message = update.Message;
 
-                   var chatId = message.From.Id;
+                    var chatId = message.From.Id;
                     if (message!.Text?.ToLower() == "/start")
                     {
                         //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat, "Your chat id: "+chatId, cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(message.Chat, "Your chat id: " + chatId,
+                            cancellationToken: cancellationToken);
                         return;
                     }
 
@@ -67,8 +68,6 @@ namespace MessageBroker.TelegramBroker
                         cancellationToken: cancellationToken);
                     await botClient.SendTextMessageAsync(chatId, "доступные кнопки",
                         cancellationToken: cancellationToken, replyMarkup: inlineKeyboard);
-                    await botClient.SendTextMessageAsync(417208492, "Message delivered!",
-                        cancellationToken: cancellationToken);
                     MenuButton menuButton = new MenuButtonDefault();
 
                 }
@@ -80,7 +79,19 @@ namespace MessageBroker.TelegramBroker
 
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
             {
-               var chatId = update.CallbackQuery.From.Id;
+                var chatId = update.CallbackQuery.From.Id;
+
+                try
+                {
+                    await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message!.MessageId,
+                        cancellationToken);
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Не вдалося стерти повідомлення: " + e.Message);
+
+                }
 
                 if (update.CallbackQuery.Data == text1)
                 {

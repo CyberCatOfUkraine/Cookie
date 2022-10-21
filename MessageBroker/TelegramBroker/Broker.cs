@@ -1,22 +1,31 @@
-﻿using System.Reflection;
-using System.Runtime.Loader;
-
-namespace MessageBroker.TelegramBroker
+﻿namespace MessageBroker.TelegramBroker
 {
     public class Broker
     {
+        private Bot bot;
+        public Broker()
+        {
+            bot = new Bot();
+
+        }
         public void LoadTelegramBot()
         {
             //TODO:Insert security code
-            Bot bot = new Bot();
-            bot.Start();
+            if (!_isBotStarted)
+            {
+                bot.Start();
+            }
+            _isBotStarted = true;
         }
-
-        public void DeliverThisMessage(long TelegramID, string Message)
+        private bool _isBotStarted;
+        public void DeliverThisMessage(long telegramId, string message)
         {
-            Bot bot = new Bot();
-            bot.Start();
-            bot.SendMessageIntoClient(TelegramID, Message);
+            if (!_isBotStarted)
+            {
+                bot.Start();
+            }
+            _isBotStarted = true;
+            bot.SendMessageIntoClient(telegramId, message);
         }
     }
 
