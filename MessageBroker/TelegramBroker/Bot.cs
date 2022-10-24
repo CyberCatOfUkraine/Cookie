@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using MessageBroker.TelegramBroker.User;
+using MessageBroker.TelegramBroker.User.User;
 using Telegram.Bot.Types;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -13,28 +16,29 @@ namespace MessageBroker.TelegramBroker
 {
     internal class Bot
     {
-        private readonly ITelegramBotClient _botClient = new TelegramBotClient(TokenLoader.Token);
-        private string text1 = "посилання1";
-        private string text2 = "посилання2";
+        private readonly ITelegramBotClient _botClient;
+
+        public Bot()//TODO: EngineerUser, OrdinaryUser, Electrician
+        {
+            _botClient = new TelegramBotClient(TokenLoader.Token);
+
+        }
 
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
-            // Некоторые действия
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(update));
+            var wrapper = UserOperationMikroWrapper.Instance;
+
+
+            //TODO: Прийшли повідомлення? Узнать від кого, далі опрацювати і видати результат нагора
+            //TODO: Принцип який, якщо користувач пише повідомлення то ми такі нажаль не можемо опрацювати ваш запит і дефолтне повідомлення з кучою кнопок типу
+            //перейти на сайт, (так блет це фіча)дізнатися про найближче заплановане відключення, дізнатися про проблеми в вашому регіоні, змінити регіон
+
+
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
-                var inlineKeyboard = new InlineKeyboardMarkup(new[]
-                {
-                    new[]
-                    {
-                        InlineKeyboardButton.WithCallbackData(text1),
-                    },
-                    new[]
-                    {
-                        InlineKeyboardButton.WithCallbackData(text2),
-                    }
-                });
+                wrapper.TryAddUserToList(update.Message!.From!.Id);
+                
                 try
                 {
                     var message = update.Message;
@@ -43,32 +47,41 @@ namespace MessageBroker.TelegramBroker
                     if (message!.Text?.ToLower() == "/start")
                     {
                         //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat, "Your chat id: " + chatId,
+                        await botClient.SendTextMessageAsync(message.Chat, "Привіт!\nВаш статус: " + UserOperationMikroWrapper.Instance.GetRoleChatById(chatId),
                             cancellationToken: cancellationToken);
                         return;
                     }
 
-                    if (message.Text.ToLower() == "del")
+                    if (message.Text.Equals("i"))
                     {
-                        for (var i = 0; i <= update.Message.MessageId; i++)
-                        {
-                            try
-                            {
-                                await botClient.DeleteMessageAsync(chatId, i);
+                        UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Engineer);
 
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
-                        }
+                        await botClient.SendTextMessageAsync(message.Chat, "You engineer now" + chatId,
+                            cancellationToken: cancellationToken);
+                    }
+                    if (message.Text.Equals("e"))
+                    {
+                        UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Electrician);
+
+                        await botClient.SendTextMessageAsync(message.Chat, "You electrician now" + chatId,
+                            cancellationToken: cancellationToken);
+                    }
+                    if (message.Text.Equals("c"))
+                    {
+                        UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Client);
+                       await botClient.SendTextMessageAsync(message.Chat, "You client now" + chatId,
+                            cancellationToken: cancellationToken);
                     }
 
-                    await botClient.SendTextMessageAsync(message.Chat, "TestMessage!!",
-                        cancellationToken: cancellationToken);
-                    await botClient.SendTextMessageAsync(chatId, "доступные кнопки",
-                        cancellationToken: cancellationToken, replyMarkup: inlineKeyboard);
-                    MenuButton menuButton = new MenuButtonDefault();
+                    if (message.Text.Equals("Check"))
+                    {
+                        await botClient.SendTextMessageAsync(message.Chat, "Status:" + UserOperationMikroWrapper.Instance.GetRoleChatById(chatId),
+                            cancellationToken: cancellationToken);
+
+                    }
+                    
+                    await botClient.SendTextMessageAsync(chatId, "WTF",
+                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
 
                 }
                 catch (Exception e)
@@ -79,7 +92,8 @@ namespace MessageBroker.TelegramBroker
 
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
             {
-                var chatId = update.CallbackQuery.From.Id;
+                var chatId = update.CallbackQuery!.From.Id;
+                wrapper.TryAddUserToList(chatId);
 
                 try
                 {
@@ -93,25 +107,30 @@ namespace MessageBroker.TelegramBroker
 
                 }
 
-                if (update.CallbackQuery.Data == text1)
+                if (update.CallbackQuery.Data == "text1")
                 {
+                    OrdinaryUser ordinaryUser = new(chatId);
                     await botClient.SendTextMessageAsync(chatId, "text1",
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken,replyMarkup:ordinaryUser.KeyboardMarkup);
 
                 }
-                else if (update.CallbackQuery.Data == text2)
+                else if (update.CallbackQuery.Data == "text2")
                 {
                     await botClient.SendTextMessageAsync(chatId, "text2",
                         cancellationToken: cancellationToken);
 
+                }
+                else if (update.CallbackQuery.Data =="press me")
+                {
+                    throw new InvalidCredentialException("Опачік");
                 }
                 else
                 {
                     await botClient.SendTextMessageAsync(chatId, "text not found",
                         cancellationToken: cancellationToken);
                 }
-            }
 
+            }
 
         }
 
