@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Xml.Serialization;
-using MessageBroker.TelegramBroker;
+using WPFUI;
 
 Console.WriteLine("Hello, World!");
-new Broker().LoadTelegramBot();
+
+var mainWindow=new MainWindow();

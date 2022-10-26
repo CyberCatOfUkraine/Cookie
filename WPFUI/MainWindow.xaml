@@ -23,21 +23,25 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
-                    Content="Товари" HorizontalAlignment="Left" 
+                    Content="Завдання" HorizontalAlignment="Left" 
                     Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
-                    Name="GoodsBtn" Click="GoodsBtn_OnClick"/>
+                    Name="TasksBtn" Click="TasksBtn_OnClick" />
             <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
-                    Content="Постачальники" HorizontalAlignment="Left" 
+                    Content="Співробітники" HorizontalAlignment="Left" 
                     Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
-                    Name="ProvidersBtn" Click="ProvidersBtn_OnClick"/>
+                    Name="EmployeesBtn" Click="EmployeesBtn_OnClick"/>
+            <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
+                    Content="Карта" HorizontalAlignment="Left" 
+                    Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
+                    Name="MapBtn" Click="MapBtn_OnClick"/>
             <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
                     Content="Статистика" HorizontalAlignment="Left" 
                     Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
                     Name="StatisticBtn" Click="StatisticBtn_OnClick"/>
             <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
-                    Content="Прогнози" HorizontalAlignment="Left" 
+                    Content="Повідомлення" HorizontalAlignment="Left" 
                     Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
-                    Name="ForecastsBtn" Click="ForecastsBtn_OnClick"/>
+                    Name="MessageBtn" Click="MessageBtn_OnClick"/>
         </StackPanel>
         <Grid Column="1">
             <materialDesign:Card Padding="12" Margin="16">

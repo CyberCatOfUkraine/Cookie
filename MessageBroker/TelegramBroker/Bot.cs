@@ -38,7 +38,7 @@ namespace MessageBroker.TelegramBroker
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
                 wrapper.TryAddUserToList(update.Message!.From!.Id);
-                
+
                 try
                 {
                     var message = update.Message;
@@ -47,8 +47,13 @@ namespace MessageBroker.TelegramBroker
                     if (message!.Text?.ToLower() == "/start")
                     {
                         //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat, "Привіт!\nВаш статус: " + UserOperationMikroWrapper.Instance.GetRoleChatById(chatId),
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Привіт!",
                             cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            UserOperationMikroWrapper.Instance.GetDefaultIntroByChatId(chatId),
+                            cancellationToken: cancellationToken);
+                        
                         return;
                     }
 
@@ -56,33 +61,39 @@ namespace MessageBroker.TelegramBroker
                     {
                         UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Engineer);
 
-                        await botClient.SendTextMessageAsync(message.Chat, "You engineer now" + chatId,
+                        await botClient.SendTextMessageAsync(message.Chat, "You engineer now",
                             cancellationToken: cancellationToken);
                     }
+
                     if (message.Text.Equals("e"))
                     {
                         UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Electrician);
 
-                        await botClient.SendTextMessageAsync(message.Chat, "You electrician now" + chatId,
+                        await botClient.SendTextMessageAsync(message.Chat, "You electrician now",
                             cancellationToken: cancellationToken);
                     }
+
                     if (message.Text.Equals("c"))
                     {
                         UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Client);
-                       await botClient.SendTextMessageAsync(message.Chat, "You client now" + chatId,
+                        await botClient.SendTextMessageAsync(message.Chat, "You client now",
                             cancellationToken: cancellationToken);
                     }
 
                     if (message.Text.Equals("Check"))
                     {
-                        await botClient.SendTextMessageAsync(message.Chat, "Status:" + UserOperationMikroWrapper.Instance.GetRoleChatById(chatId),
-                            cancellationToken: cancellationToken);
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Status:" + UserOperationMikroWrapper.Instance.GetRoleChatById(chatId),
+                            cancellationToken: cancellationToken, replyMarkup: UserOperationMikroWrapper.Instance.GetKeyboardMarkupByChatId(chatId));
 
                     }
-                    
-                    await botClient.SendTextMessageAsync(chatId, "WTF",
+
+                    #region Invalid input
+
+                    await botClient.SendTextMessageAsync(chatId, BotStrings.InvalidInput,
                         cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
 
+                    #endregion
                 }
                 catch (Exception e)
                 {
@@ -122,7 +133,7 @@ namespace MessageBroker.TelegramBroker
                 }
                 else if (update.CallbackQuery.Data =="press me")
                 {
-                    throw new InvalidCredentialException("Опачік");
+                    
                 }
                 else
                 {

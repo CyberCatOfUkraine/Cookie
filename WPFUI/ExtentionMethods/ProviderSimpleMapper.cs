@@ -5,30 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataTransferWrapper;
-using WPFUI.Models;
+using Models;
 
 namespace WPFUI.ExtentionMethods
 {
     internal static class ProviderSimpleMapper
     {
-        public static List<DataTransferWrapper.Models.Provider> Convert(this List<WPFUI.Models.Provider> providersList)
+        public static List<DataTransferWrapper.Models.Provider> Convert(this List<Models.Provider> providersList)
         {
             return (from provider in providersList
                 select new DataTransferWrapper.Models.Provider(provider.Name,provider.GoodsList.Convert(),provider.TelegramId)).ToList();
         }
-        public static List<WPFUI.Models.Provider> Convert(this List<DataTransferWrapper.Models.Provider> providersList)
+        public static List<Models.Provider> Convert(this List<DataTransferWrapper.Models.Provider> providersList)
         {
             return (from provider in providersList
-                select new WPFUI.Models.Provider(provider.Name,provider.GoodsList.Convert(),provider.TelegramId)).ToList();
+                select new Models.Provider(provider.Name,provider.GoodsList.Convert(),provider.TelegramId)).ToList();
         }
-        public static List<WPFUI.Models.ProviderUI> ConvertUI(this List<DataTransferWrapper.Models.Provider> providersList)
+        public static List<Models.ProviderUI> ConvertUI(this List<DataTransferWrapper.Models.Provider> providersList)
         {
             
             return (from provider in providersList
-                select new WPFUI.Models.ProviderUI(provider.Name, (from goods in provider.GoodsList select goods.Name).EnumerableToCustomString(), provider.TelegramId)).ToList();
+                select new Models.ProviderUI(provider.Name, (from goods in provider.GoodsList select goods.Name).EnumerableToCustomString(), provider.TelegramId)).ToList();
         }
         
-        public static WPFUI.Models.Provider Convert(this WPFUI.Models.ProviderUI providerUI)
+        public static Models.Provider Convert(this Models.ProviderUI providerUI)
         {
 
             DataTransferWrapper.Models.Provider provider;

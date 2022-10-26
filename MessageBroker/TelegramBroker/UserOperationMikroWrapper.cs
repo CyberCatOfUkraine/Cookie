@@ -69,10 +69,22 @@ namespace MessageBroker.TelegramBroker
             if (IsExistInDb(chatId))
             {
                 users.Find(x=>x.ChatId==chatId)!.Role=role;
+                users.Find(x=>x.ChatId==chatId)!.KeyboardMarkup=ChangeMarkupByRole(role);
                 return;    
             }
             Console.WriteLine("Current user not exist! On ChangeStatus");
 
+        }
+
+        private InlineKeyboardMarkup ChangeMarkupByRole(RoleEnum role)
+        {
+            return role switch
+            {
+                RoleEnum.Engineer => KeyboardMarkups.EngineerKeyboardMarkup,
+                RoleEnum.Client => KeyboardMarkups.ClientKeyboardMarkup,
+                RoleEnum.Electrician => KeyboardMarkups.ElectricianKeyboardMarkup,
+                _ => KeyboardMarkups.ClientKeyboardMarkup
+            };
         }
 
         public InlineKeyboardMarkup GetKeyboardMarkupByChatId(long chatId)
@@ -83,6 +95,27 @@ namespace MessageBroker.TelegramBroker
             }
             Console.WriteLine("Current user not exist! On GetKeyboardMarkupByChatId");
             return new InlineKeyboardMarkup(new InlineKeyboardButton("GetKeyboardMarkupByChatId in MessageBroker.TelegramBroker.UserOperationMikroWrapper return shit"));
+        }
+
+        public string GetDefaultIntroByChatId(long chatId)
+        {
+            if (IsExistInDb(chatId))
+            {
+               return  GetIntroByRole(users.Find(x => x.ChatId == chatId)!.Role);
+            }
+
+            return GetIntroByRole(RoleEnum.Client);
+        }
+
+        private string GetIntroByRole(RoleEnum role)
+        {
+            return role switch
+            {
+                RoleEnum.Engineer => BotStrings.EngineerIntro,
+                RoleEnum.Client => BotStrings.ClientIntro,
+                RoleEnum.Electrician => BotStrings.ElectricianIntro,
+                _ => BotStrings.ClientIntro
+            };
         }
     }
 }

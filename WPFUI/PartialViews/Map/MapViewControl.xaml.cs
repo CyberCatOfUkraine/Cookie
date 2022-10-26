@@ -12,21 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DataTransferWrapper;
-using WPFUI.ExtentionMethods;
 
-namespace WPFUI.PartialViews
+namespace WPFUI.PartialViews.Map
 {
     /// <summary>
-    /// Interaction logic for StatisticViewControl.xaml
+    /// Interaction logic for MapViewControl.xaml
     /// </summary>
-    public partial class StatisticViewControl : UserControl
+    public partial class MapViewControl : UserControl
     {
-        public StatisticViewControl()
+        public MapViewControl()
         {
             InitializeComponent();
-
-            GoodsStatisticDataGrid.ItemsSource = new GoodsWrapper().GetAll().Convert();
         }
     }
 }
