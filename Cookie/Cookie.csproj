@@ -7,9 +7,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MessageBroker\MessageBroker.csproj" />
-    <ProjectReference Include="..\WPFUI\WPFUI.csproj" />
-  </ItemGroup>
-
 </Project>

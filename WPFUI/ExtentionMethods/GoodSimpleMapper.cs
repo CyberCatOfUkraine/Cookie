@@ -6,7 +6,7 @@ namespace WPFUI.ExtentionMethods
 {
     internal static class GoodSimpleMapper
     {
-        public static List<DataTransferWrapper.Models.Goods> Convert(this List<Models.Goods> goodsList)
+        /*public static List<DataTransferWrapper.Models.Goods> Convert(this List<Models.Goods> goodsList)
         {
             return (from goods in goodsList
                 select new DataTransferWrapper.Models.Goods(goods.Name, goods.Count, goods.MinCount, goods.Price)).ToList();
@@ -23,6 +23,6 @@ namespace WPFUI.ExtentionMethods
         public static Models.Goods Convert(this DataTransferWrapper.Models.Goods goods)
         {
             return new Models.Goods(goods.Name,goods.Count,goods.MinCount,goods.Price);
-        }
+        }*/
     }
 }

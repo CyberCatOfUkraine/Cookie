@@ -1,4 +1,6 @@
-﻿namespace WPFUI.Models
+﻿using System.Collections.Generic;
+
+namespace WPFUI.Models
 {
     public class Employee
     {
