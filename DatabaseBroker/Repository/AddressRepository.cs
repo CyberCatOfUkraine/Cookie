@@ -46,12 +46,12 @@ namespace DatabaseBroker.Repository
         {
             var address = Get(predicate);
 
-            _context.Entry(address).Entity.Oblast = item.Oblast;
-            _context.Entry(address).Entity.Rajon = item.Rajon;
-            _context.Entry(address).Entity.NaseleniyPunkt = item.NaseleniyPunkt;
-            _context.Entry(address).Entity.Vulicya = item.Vulicya;
-            _context.Entry(address).Entity.Kvartira = item.Kvartira;
-            _context.Entry(address).Entity.Budinok = item.Budinok;
+            _context.Entry(address).Entity.Region = item.Region;
+            _context.Entry(address).Entity.District = item.District;
+            _context.Entry(address).Entity.Settlement = item.Settlement;
+            _context.Entry(address).Entity.Street = item.Street;
+            _context.Entry(address).Entity.Apartment = item.Apartment;
+            _context.Entry(address).Entity.House = item.House;
             _context.Entry(address).State = EntityState.Modified; ;
         }
 
