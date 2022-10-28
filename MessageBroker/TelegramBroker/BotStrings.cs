@@ -9,29 +9,45 @@ namespace MessageBroker.TelegramBroker
     internal struct BotStrings
     {
         #region For KeyboardMarkups
-        public static readonly string RemindForAviableOperations = "Доступні операції";
 
         #region Client KeyboardMarkups
         public static readonly string SiteText = "Сайт програми";
         public static readonly string SiteURL = "https://github.com/CyberCatOfUkraine/Cookie";
-        public static readonly string CheckForProblems = "Переглянути чи є проблема на вашій вулиці";
+        public static readonly string CheckForProblems = "Проблеми електропостачання";
         #endregion
 
         #region Engineer KeyboardMarkups
-        public static readonly string StatOfFreeEmployees = "Статистика зайнятості працівників";
-        public static readonly string StatOfPowerGridProblems = "Статистика проблем в електромережі";
+        public static readonly string StatOfFreeEmployees = "Зайнятість працівників";
+        public static readonly string StatOfPowerGridProblems = "Проблеми в електромережі";
         #endregion
 
         #region Electrician KeyboardMarkups
         public static readonly string NewTaskAvailability = "Доступні завдання";
-        public static readonly string UpdateTaskState = "Звіт щодо стану завдання";
+        public static readonly string UpdateTaskState = "Оновлення стану завдання";
         #endregion
-        
+
+        #region Change Role
+
+        public static readonly string UpdateRoleElectrician = "Електрик";
+        public static readonly string UpdateRoleEngineer = "Інженер";
+        public static readonly string UpdateRoleClient = "Клієнт";
+        #endregion
+
+        #region Invalid input
+        public static readonly string AvailableOperationsList = "Перелік доступних операцій";
+        public static readonly string UpdateRoleRequest = "Запит зміни прав доступу до даних";
+        #endregion
         #endregion
 
         #region Bot answers
         public static readonly string ActionToCheckForProblems = "Щоб переглянути чи є проблема на вашій вулиці введіть адресу:\n(Розділення комами обов'язкове)";
-        public static readonly string InvalidInput = "Не вдалося виконати ваш запит :(";
+        public static readonly string InvalidInput = "Не вдалося виконати ваш запит :(\n" +
+                                                     "На жаль,розпізнавання тексту в даній версії боту не доступно.\n" +
+                                                     "Для взаємодії з ботом необхідно використовувати кнопки подані нижче";
+        public static readonly string ChooseRole = "Виберіть необхідний рівень доступу до даних";
+        public static readonly string UpdateRoleRequestOk = "Запит щодо зміни прав доступу до даних погоджено";
+        public static readonly string UpdateRoleRequestCanceled = "Запит щодо зміни прав доступу до даних відхилено";
+        public static readonly string AvailableOperations = "Доступні операції";
         #endregion
 
         #region Intro 
@@ -45,6 +61,5 @@ namespace MessageBroker.TelegramBroker
                                                          "1)Перегляд доступних завдань" +
                                                          "2)Звітування щодо стану отриманого завдання";
         #endregion
-
     }
 }

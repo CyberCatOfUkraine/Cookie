@@ -94,7 +94,7 @@ namespace MessageBroker.TelegramBroker
                 return users.Find(x => x.ChatId == chatId)!.KeyboardMarkup;
             }
             Console.WriteLine("Current user not exist! On GetKeyboardMarkupByChatId");
-            return new InlineKeyboardMarkup(new InlineKeyboardButton("GetKeyboardMarkupByChatId in MessageBroker.TelegramBroker.UserOperationMikroWrapper return shit"));
+            return null!;
         }
 
         public string GetDefaultIntroByChatId(long chatId)

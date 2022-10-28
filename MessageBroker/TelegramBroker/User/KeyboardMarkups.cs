@@ -23,10 +23,6 @@ namespace MessageBroker.TelegramBroker.User
                     new[]
                     {
                         InlineKeyboardButton.WithCallbackData(BotStrings.CheckForProblems)
-                    },
-                    new[]
-                    {
-                        InlineKeyboardButton.WithCallbackData(BotStrings.RemindForAviableOperations)
                     }
                 };
             }
@@ -46,10 +42,6 @@ namespace MessageBroker.TelegramBroker.User
                     new[]
                     {
                         InlineKeyboardButton.WithCallbackData(BotStrings.StatOfPowerGridProblems)
-                    },
-                    new []
-                    {
-                        InlineKeyboardButton.WithCallbackData(BotStrings.RemindForAviableOperations)
                     }
                 };
             }
@@ -69,12 +61,47 @@ namespace MessageBroker.TelegramBroker.User
                    new[]
                    {
                        InlineKeyboardButton.WithCallbackData(BotStrings.UpdateTaskState)
-                   },
-                   new []
-                   {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.RemindForAviableOperations)
                    }
                };
+            }
+        }
+        public static InlineKeyboardMarkup ChangeRoleKeyboardMarkup
+        {
+           get
+           {
+               return new[]
+               {
+                   new[]
+                   {
+                       InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleClient)
+                   },
+                   new[]
+                   {
+                       InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleElectrician)
+                   },
+                   new[]
+                   {
+                       InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleEngineer)
+                   }
+               };
+            }
+        }
+
+        public static InlineKeyboardMarkup InvalidInput
+        {
+            get
+            {
+                return new[]
+                {
+                    new[]
+                    {
+                        InlineKeyboardButton.WithCallbackData(BotStrings.AvailableOperationsList)
+                    },
+                    new[]
+                    {
+                        InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleRequest)
+                    }
+                };
             }
         }
     }

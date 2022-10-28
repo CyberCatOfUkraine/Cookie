@@ -1,8 +1,15 @@
-﻿namespace DataBroker
+﻿using System.Data.Entity;
+
+namespace DataBroker
 {
+    public class TestContext : DbContext
+    {
+        public DbSet<String> test { get; set; }
+    }
     public class DatabaseBroker<T> where T:class //TODO:CRUD
     {
         private static List<T> _itemsList = new();
+        
         public void Create(T item)
         {
             _itemsList.Add(item);
