@@ -6,7 +6,7 @@ namespace WebUI.Controllers
 {
     public class MessagesController : Controller
     {
-        private DatabaseBroker<ClientMessage> database;
+        private SQLDatabaseBroker<ClientMessage> database;
         public IActionResult Index()
         {
             PrintDatabaseCount();
