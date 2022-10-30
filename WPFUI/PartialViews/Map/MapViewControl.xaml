@@ -9,6 +9,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Name="CoordinateTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" MinHeight="30" MinWidth="500"></TextBlock>
+        <Grid Grid.Row="1" Name="MapContainerGrid">
+
+        </Grid>
     </Grid>
 </UserControl>
