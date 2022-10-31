@@ -50,6 +50,7 @@ namespace DatabaseBroker.Repository
             _context.Entry(workTask).Entity.Finished=item.Finished;
             _context.Entry(workTask).Entity.PausesList=item.PausesList;
             _context.Entry(workTask).Entity.AssignedEmployees=item.AssignedEmployees;
+            _context.Entry(workTask).Entity.AssignedEmployeesAccesses=item.AssignedEmployeesAccesses;
             _context.Entry(workTask).Entity.Addresses=item.Addresses;
             _context.Entry(workTask).Entity.CurrentState=item.CurrentState;
             _context.Entry(workTask).State = EntityState.Modified;
@@ -63,6 +64,11 @@ namespace DatabaseBroker.Repository
         public void SaveChanges()
         {
             _context.SaveChanges();
+        }
+
+        public int Count()
+        {
+            return _context.WorkTasks.Count();
         }
     }
 }

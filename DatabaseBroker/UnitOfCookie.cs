@@ -10,13 +10,9 @@ namespace DatabaseBroker
 {
     public class UnitOfCookie:IDisposable
     {
-        private CookieContext _context;
+        private static CookieContext _context = new();
+        public IRepository<Address> AddressRepository =>  new AddressRepository(_context);
 
-        public UnitOfCookie()
-        {
-            _context = new();
-        }
-        public IRepository<Address> AddressRepository => new AddressRepository(_context);
         public IRepository<ClientMessage> ClientMessageRepository => new ClientMessageRepository(_context);
         public IRepository<Access> AccessRepository => new AccessRepository(_context);
         public IRepository<Employee> EmployeeRepository => new EmployeeRepository(_context);

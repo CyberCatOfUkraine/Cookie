@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WPFUI.Models
 {
-    public class Task
+    public class WorkTask
     {
-        public Task(DateTime started, DateTime finished, List<Pause> pausesList, List<Employee> assignedEmployees, TaskState currentState, List<Address> addresses, string name)
+        public WorkTask(DateTime started, DateTime finished, List<Pause> pausesList, List<Employee> assignedEmployees, TaskState currentState, List<Address> addresses, string name, List<Access> assignedEmployeesAccesses)
         {
             Started = started;
             Finished = finished;
@@ -17,6 +17,7 @@ namespace WPFUI.Models
             CurrentState = currentState;
             Addresses = addresses;
             Name = name;
+            AssignedEmployeesAccesses = assignedEmployeesAccesses;
         }
 
         public int Id { get; set; }
@@ -25,6 +26,7 @@ namespace WPFUI.Models
         public DateTime Finished { get; set; }
         public List<Pause> PausesList { get; set; }
         public List<Employee> AssignedEmployees { get; set; }
+        public List<Access> AssignedEmployeesAccesses { get; set; }
         public List<Address> Addresses { get; set; }
         public TaskState CurrentState { get; set; }
     }

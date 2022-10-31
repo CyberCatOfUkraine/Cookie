@@ -57,12 +57,17 @@ namespace DatabaseBroker.Repository
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            _context.Addresses.RemoveRange(_context.Addresses);
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
+        }
+
+        public int Count()
+        {
+           return _context.Addresses.Count();
         }
     }
 }

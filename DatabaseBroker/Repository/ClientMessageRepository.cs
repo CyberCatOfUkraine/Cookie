@@ -61,5 +61,10 @@ namespace DatabaseBroker.Repository
         {
             _context.SaveChanges();
         }
+
+        public int Count()
+        {
+            return _context.ClientMessages.Count();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 namespace WPFUI.Models
 {
@@ -20,6 +21,19 @@ namespace WPFUI.Models
         /// Допуски до роботи до вказаного діапазону напруг
         /// </summary>
         public List<Access> Accesses { get; set; }
+
+        public string AccessesWPF
+        {
+            get
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (var access in Accesses)
+                {
+                    stringBuilder.AppendLine(access.Name);
+                }
+                return stringBuilder.ToString();
+            }
+        }
     }
 
     /// <summary>

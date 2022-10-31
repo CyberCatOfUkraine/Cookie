@@ -53,12 +53,17 @@ namespace DatabaseBroker.Repository
 
         public void Clear()
         {
-            _context.Employees.RemoveRange(_context.Employees);
+            _context.Pauses.RemoveRange(_context.Pauses);
         }
 
         public void SaveChanges()
         {
             _context.SaveChanges();
+        }
+
+        public int Count()
+        {
+            return _context.Pauses.Count();
         }
     }
 }
