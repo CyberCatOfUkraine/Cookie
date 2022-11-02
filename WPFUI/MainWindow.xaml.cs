@@ -1,12 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using DatabaseBroker;
-using Mapsui;
-using Mapsui.Geometries;
-using Mapsui.Projection;
-using Mapsui.UI.Wpf;
-using Mapsui.Utilities;
+using WPFUI.LoadingWindow;
 using WPFUI.PartialViews;
 using WPFUI.PartialViews.Accesses;
 using WPFUI.PartialViews.Employees;
@@ -21,15 +19,14 @@ namespace WPFUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        private UnitOfCookie unitOfCookie;
-        public MainWindow()
+        private UnitOfCookie _unitOfCookie;
+        public MainWindow(UnitOfCookie unitOfCookie)
         {
-            unitOfCookie = new UnitOfCookie();
-
             InitializeComponent();
 
             TasksBtn.Focus();
             TasksBtn_OnClick(null, null);
+            _unitOfCookie = unitOfCookie;
         }
 
         private void TasksBtn_OnClick(object sender, RoutedEventArgs e)
@@ -65,7 +62,9 @@ namespace WPFUI
         }
         private void AccessesBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            AddViewControlToContainer(new AccessesViewControl(unitOfCookie),"Допуски співробітників");
+            AddViewControlToContainer(new AccessesViewControl(_unitOfCookie),"Допуски співробітників");
         }
+
+        public event Action FinalyDataLoadded;
     }
 }

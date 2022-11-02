@@ -34,8 +34,25 @@ namespace WPFUI.PartialViews.Accesses
         private void AddAccessBtn_OnClick(object sender, RoutedEventArgs e)
         {
             Access access = new Access(NameTextBox.Text);
-            uof.AccessRepository.Create(access.Convert());
+            if (IsDuplicated(access))
+            {
+                MessageBox.Show("Неможливо додати дублікат!");
+                RemoveThisControl.Invoke();
+                return;
+            }
+
+            var messageBoxResult = MessageBox.Show("Ви точно збираєтесь створити новий допуск", "Створення допуску",MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                    uof.AccessRepository.Create(access.Convert());
+                    uof.AccessRepository.SaveChanges();
+            }
             RemoveThisControl.Invoke();
+        }
+
+        private bool IsDuplicated(Access access)
+        {
+            return uof.AccessRepository.GetAll().Exists(x => x.Name == access.Name);
         }
 
         private void CancelBtn_OnClick(object sender, RoutedEventArgs e)

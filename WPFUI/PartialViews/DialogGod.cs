@@ -10,13 +10,17 @@ namespace WPFUI.PartialViews
 {
     internal class DialogGod<T> where T:class
     {
-        
+        private IComparer<T> _comparer;
+        public DialogGod(IComparer<T> comparer)
+        {
+            _comparer = comparer;
+        }
         internal void Kill(DialogHost dialog,DataGrid updatableDataGrid,List<T> dataList)
         {
             dialog.IsOpen = false;
             
             updatableDataGrid.ItemsSource = null;
-            dataList.Sort();
+            dataList.Sort(_comparer);
             updatableDataGrid.ItemsSource = dataList;
         }
 

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DatabaseBroker;
 using MaterialDesignThemes.Wpf;
+using WPFUI.Comparator;
 using WPFUI.Models;
 using WPFUI.ExtentionMethods;
 
@@ -64,21 +65,25 @@ namespace WPFUI.PartialViews.Accesses
             Access  access=AccessesDataGrid.SelectedItem as Access;
             if (access!=null)
             {
-                
+                uof.AccessRepository.RemoveBy(x=>x.Id==access.Id);
+                AccessesDataGrid.ItemsSource = null;
+                accesses.Remove(access);
+                AccessesDataGrid.ItemsSource = accesses;
+
             }
         }
-        DialogGod<Access> dialogGod = new();
+        DialogGod<Access> dialogGod = new(new AccessComparator());
         
         private void AddBtn_OnClick(object sender, RoutedEventArgs e)
         {
             var addControl = new AddAccessViewControl(uof);
             addControl.RemoveThisControl+=RemoveAddControl;
             dialogGod.Create(AddAccessesDialogHost,addControl);
-            
         }
 
         private void RemoveAddControl()
         {
+            accesses = uof.AccessRepository.GetAll().Convert();
             dialogGod.Kill(AddAccessesDialogHost, AccessesDataGrid, accesses);
         }
     }
