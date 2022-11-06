@@ -36,7 +36,7 @@ namespace WPFUI
         }
         private void EmployeesBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            AddViewControlToContainer(new EmployeesViewControl(),"Співробітники");
+            AddViewControlToContainer(new EmployeesViewControl(_unitOfCookie),"Співробітники");
         }
 
         private void MapBtn_OnClick(object sender, RoutedEventArgs e)

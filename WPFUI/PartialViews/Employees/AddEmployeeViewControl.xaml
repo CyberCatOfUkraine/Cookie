@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="WPFUI.PartialViews.Employees.AddEmployeeViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUI.PartialViews.Employees"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+            
+             d:DesignHeight="350" d:DesignWidth="700"
+             MinHeight="350" MinWidth="700">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Name="InputNameGrid" Grid.Row="0" Grid.RowSpan="2" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="8*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Margin="0,0,0,20" HorizontalAlignment="Center" VerticalAlignment="Center">Новий допуск</TextBlock>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >ПІБ:</TextBlock>
+                    <TextBox Grid.Column="1" MinWidth="220" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto" Name="NameTextBox"></TextBox>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Button HorizontalAlignment="Center"
+                            Name="AddAccessesToEmployeeBtn" Click="AddAccessesToEmployeeBtn_OnClick">Вибрати допуски</Button>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <Grid Name="InputAcessesGrid" Grid.Row="0" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <DataGrid Margin="20" x:Name="EmployeeAccessesDataGrid" AutoGenerateColumns="False"
+                          VerticalScrollBarVisibility="Auto" MinWidth="520"
+                >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn MinWidth="450" Header="Назва" Binding="{Binding Path=Name}"  IsReadOnly="True"/>
+                        <DataGridTemplateColumn MinWidth="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button  VerticalAlignment="Center" HorizontalAlignment="Center" Click="ChooseButtonBase_OnClick">Вибрати</Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+            <Button Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="SubmitAccessesBtn" Click="SubmitAccessesBtn_OnClick">Підтвердити допуски</Button>
+        </Grid>
+        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Style="{DynamicResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Center" Name="AddEmployeeBtn" Click="AddEmployeeBtn_OnClick">Додати</Button>
+            <Button Grid.Column="1" Style="{DynamicResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Center" Name="CancelBtn" Click="CancelBtn_OnClick">Відмінити</Button>
+        </Grid>
+    </Grid>
+</UserControl>

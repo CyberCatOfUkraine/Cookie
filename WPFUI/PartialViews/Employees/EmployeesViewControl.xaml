@@ -19,7 +19,7 @@
         >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ПІБ"           Width="*"    Binding="{Binding Path=Credentials}"  IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Допуски"       Width="0.5*" Binding="{Binding Path=AccessesWPF}"/>
+                    <DataGridTextColumn Header="Допуски"       Width="0.6*" Binding="{Binding Path=AccessesWPF}"/>
                     <DataGridTemplateColumn Width="1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -37,23 +37,15 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-                <DataGrid.RowDetailsTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text=" Мінімальна кількість: " />
-                            <TextBlock Text="{Binding Path=MinCount}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </DataGrid.RowDetailsTemplate>
             </DataGrid>
             <Grid Grid.Row="1">
-                <Button Name="AddBtn" Style="{DynamicResource MaterialDesignRaisedAccentButton}" 
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Width="130" 
-                    Background="AntiqueWhite" 
-            >Додати товар</Button>
+                <Button Name="AddEmployeeBtn" Style="{DynamicResource MaterialDesignRaisedAccentButton}" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" 
+                    Background="AntiqueWhite"  Click="AddEmployeeBtn_OnClick"
+            >Додати співробітника</Button>
                 <!--Click="AddBtn_OnClick"-->
             </Grid>
-            <materialDesign:DialogHost Grid.Row="0" Grid.RowSpan="2" Name="GoodsDialogHost"/>
+            <materialDesign:DialogHost Grid.Row="0" Grid.RowSpan="2" Name="AddEmployeeDialogHost"/>
         </Grid>
     </Grid>
 </UserControl>

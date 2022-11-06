@@ -12,7 +12,7 @@ namespace DatabaseBroker
     {
         public CookieContext()
         {
-            Database.Delete();
+            //Database.Delete();
             Database.CreateIfNotExists();
         }
         public DbSet<Address> Addresses { get; set; }

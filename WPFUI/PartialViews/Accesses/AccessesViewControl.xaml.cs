@@ -56,7 +56,8 @@ namespace WPFUI.PartialViews.Accesses
                 var name = dataContext!.Name;
                 var access = accesses.First(x=>x.Name==name);
                 access.Name = textBox.Text;
-                MessageBox.Show($"id:{access.Id}\nname: {access.Name}\n");
+                uof.AccessRepository.Update(x=>x.Name==name,access.Convert());
+                uof.AccessRepository.SaveChanges();
             }
         }
 
@@ -65,10 +66,11 @@ namespace WPFUI.PartialViews.Accesses
             Access  access=AccessesDataGrid.SelectedItem as Access;
             if (access!=null)
             {
-                uof.AccessRepository.RemoveBy(x=>x.Id==access.Id);
+                uof.AccessRepository.RemoveBy(x=>x.Name==access.Name);
                 AccessesDataGrid.ItemsSource = null;
                 accesses.Remove(access);
                 AccessesDataGrid.ItemsSource = accesses;
+                uof.AccessRepository.SaveChanges();
 
             }
         }
@@ -85,6 +87,11 @@ namespace WPFUI.PartialViews.Accesses
         {
             accesses = uof.AccessRepository.GetAll().Convert();
             dialogGod.Kill(AddAccessesDialogHost, AccessesDataGrid, accesses);
+        }
+
+        private void AccessesViewControl_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            uof.AccessRepository.SaveChanges();
         }
     }
 }

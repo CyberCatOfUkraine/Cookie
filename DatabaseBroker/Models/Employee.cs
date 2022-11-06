@@ -24,7 +24,6 @@ namespace DatabaseBroker.Models
     public class Access
     {
         [Key]
-        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

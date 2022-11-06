@@ -33,6 +33,12 @@ namespace WPFUI.PartialViews.Accesses
         }
         private void AddAccessBtn_OnClick(object sender, RoutedEventArgs e)
         {
+            if (string.IsNullOrEmpty(NameTextBox.Text))
+            {
+                MessageBox.Show("Неможливо створити пустий допуск!");
+                return;
+            }
+
             Access access = new Access(NameTextBox.Text);
             if (IsDuplicated(access))
             {

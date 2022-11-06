@@ -1,9 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
-/*Console.WriteLine("Bot started");
-MessageBroker.TelegramBroker.Broker broker=new();
-broker.LoadTelegramBot();
-Console.ReadKey();*/
-
+﻿/*// See https://aka.ms/new-console-template for more information
+Console.WriteLine("Bot started");
+MessageBroker.TelegramBroker.Broker broker = new();
+broker.LoadTelegramBot();*/
+Console.ReadKey();
+/*
 using DatabaseBroker;
 using DatabaseBroker.Models;
 using DatabaseBroker.Repository;
@@ -66,3 +66,4 @@ static class Jaba
         }
     }
 }
+*/
