@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DatabaseBroker.Models;
+﻿using DatabaseBroker.Models;
 
 namespace DatabaseBroker.Repository
 {
@@ -44,15 +38,7 @@ namespace DatabaseBroker.Repository
 
         public void Update(Predicate<Address> predicate, Address item)
         {
-            var address = Get(predicate);
-
-            _context.Entry(address).Entity.Region = item.Region;
-            _context.Entry(address).Entity.District = item.District;
-            _context.Entry(address).Entity.Settlement = item.Settlement;
-            _context.Entry(address).Entity.Street = item.Street;
-            _context.Entry(address).Entity.Apartment = item.Apartment;
-            _context.Entry(address).Entity.House = item.House;
-            _context.Entry(address).State = EntityState.Modified; ;
+            _context.Addresses.Update(predicate,item);
         }
 
         public void Clear()

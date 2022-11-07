@@ -80,7 +80,7 @@ namespace WPFUI.PartialViews.Accesses
         {
             var addControl = new AddAccessViewControl(uof);
             addControl.RemoveThisControl+=RemoveAddControl;
-            dialogGod.Create(AddAccessesDialogHost,addControl);
+            dialogGod.Create(addControl);
         }
 
         private void RemoveAddControl()

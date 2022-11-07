@@ -24,9 +24,9 @@ namespace WPFUI.PartialViews
             updatableDataGrid.ItemsSource = dataList;
         }
 
-        internal void Create(DialogHost dialog,UserControl control)
+        internal void Create(UserControl control)
         {
-            DialogHost.Show(control);
+                DialogHost.Show(control);
         }
     }
 }

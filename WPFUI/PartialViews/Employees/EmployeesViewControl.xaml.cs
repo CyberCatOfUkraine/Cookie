@@ -45,13 +45,36 @@ namespace WPFUI.PartialViews.Employees
             var addControl = new AddEmployeeViewControl(_unitOfCookie);
             addControl.RemoveThisControl += RemoveAddControl;
 
-            dialog.Create(AddEmployeeDialogHost,addControl);
+            dialog.Create(addControl);
         }
 
         private void RemoveAddControl()
         {
             _employees=_unitOfCookie.EmployeeRepository.GetAll().Convert();
-            dialog.Kill(AddEmployeeDialogHost,EmployeesDataGrid,_employees);
+            dialog.Kill(EmployeeDialogHost,EmployeesDataGrid,_employees);
+        }
+
+        private void DeleteEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var employee = EmployeesDataGrid.CurrentItem as Employee;
+            _unitOfCookie.EmployeeRepository.RemoveBy(x=>x.Id==employee.Id);
+            _employees.Remove(employee);
+            EmployeesDataGrid.ItemsSource = null;
+            EmployeesDataGrid.ItemsSource = _employees;
+        }
+
+        private void ChangeEmployeeAccessesBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            var employee = EmployeesDataGrid.CurrentItem as Employee;
+            var control = new ChangeEmployeeAcessesViewControl(_unitOfCookie, employee);
+            control.RemoveThisControl += RemoveChangeControl;
+            dialog.Create(control);
+        }
+
+        private void RemoveChangeControl()
+        {
+            _employees = _unitOfCookie.EmployeeRepository.GetAll().Convert();
+            dialog.Kill(EmployeeDialogHost, EmployeesDataGrid, _employees);
         }
     }
 }
