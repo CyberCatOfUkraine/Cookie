@@ -51,6 +51,12 @@ namespace WPFUI.PartialViews.Employees
                 return;
             }
 
+            if (_unitOfCookie.EmployeeRepository.Get(x=>x.Credentials== NameTextBox.Text)!=null)
+            {
+                MessageBox.Show("Неможливо додати ще одного співробітника з ідентичними даними!");
+                CloseThisControl();
+                return;
+            }
             var text = _selectedAccesses.Count == 0 ? "Ви точно збираєтесь створити нового співробітника з ВІДСУТНІМИ ДОПУСКАМИ ?" : "Ви точно збираєтесь створити нового співробітника ?";
             var messageBoxResult = MessageBox.Show(text, "Створення допуску", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)

@@ -66,12 +66,35 @@ namespace WPFUI.PartialViews.Accesses
             Access  access=AccessesDataGrid.SelectedItem as Access;
             if (access!=null)
             {
-                uof.AccessRepository.RemoveBy(x=>x.Name==access.Name);
-                AccessesDataGrid.ItemsSource = null;
-                accesses.Remove(access);
-                AccessesDataGrid.ItemsSource = accesses;
-                uof.AccessRepository.SaveChanges();
 
+
+                var employeesWithThisAccess = EmployeesWithThisAccess(access);
+                switch (employeesWithThisAccess.Count)
+                {
+                    case 1:
+                        MessageBox.Show("Даний допуск не може бути видалений!\n Спочатку видаліть співробітника:\n" + employeesWithThisAccess.First().Credentials);
+                        break;
+                    case > 1:
+                    {
+                        var sb = new StringBuilder();
+                        for (var index = 0; index < employeesWithThisAccess.Count; index++)
+                        {
+                            var employee = employeesWithThisAccess[index];
+                            var number = index + 1;
+                            sb.AppendLine(number+")   "+employee.Credentials);
+                        }
+
+                        MessageBox.Show("Даний допуск не може бути видалений!\n Спочатку видаліть співробітників:\n" + sb);
+                        break;
+                    }
+                    case 0:
+                        uof.AccessRepository.RemoveBy(x => x.Name == access.Name);
+                        AccessesDataGrid.ItemsSource = null;
+                        accesses.Remove(access);
+                        AccessesDataGrid.ItemsSource = accesses;
+                        uof.AccessRepository.SaveChanges();
+                        break;
+                }
             }
         }
         DialogGod<Access> dialogGod = new(new AccessComparator());
@@ -87,6 +110,20 @@ namespace WPFUI.PartialViews.Accesses
         {
             accesses = uof.AccessRepository.GetAll().Convert();
             dialogGod.Kill(AddAccessesDialogHost, AccessesDataGrid, accesses);
+        }
+
+        private List<Employee> EmployeesWithThisAccess(Access access)
+        {
+            List<Employee> employees=new List<Employee>();
+            var databaseAccess = access.Convert();
+            foreach (var employee in uof.EmployeeRepository.GetAll())
+            {
+                if (employee.Accesses.Exists(x=>x.Name==access.Name))
+                {
+                    employees.Add(employee.Convert());
+                }
+            }
+            return employees;
         }
 
         private void AccessesViewControl_OnUnloaded(object sender, RoutedEventArgs e)
