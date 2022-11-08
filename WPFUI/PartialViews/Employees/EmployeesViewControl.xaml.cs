@@ -36,12 +36,12 @@ namespace WPFUI.PartialViews.Employees
             
             _employees = _unitOfCookie.EmployeeRepository.Count() > 0 ? _unitOfCookie.EmployeeRepository.GetAll().Convert() : new List<Employee>();
             EmployeesDataGrid.ItemsSource = _employees;
+            dialog = new DialogGod<Employee>(new EmployeeComparator());
         }
 
         private DialogGod<Employee> dialog;
         private void AddEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            dialog = new DialogGod<Employee>(new EmployeeComparator());
             var addControl = new AddEmployeeViewControl(_unitOfCookie);
             addControl.RemoveThisControl += RemoveAddControl;
 

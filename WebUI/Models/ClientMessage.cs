@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebUI.Models
 {
-    internal class ClientMessage
+    public class ClientMessage
     {
         public ClientMessage(string text, DateTime recivedTime, Address address)
         {

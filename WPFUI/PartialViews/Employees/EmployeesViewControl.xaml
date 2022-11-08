@@ -19,7 +19,7 @@
         >
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ПІБ"           Width="*"    Binding="{Binding Path=Credentials}"  IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Допуски"       Width="0.6*" Binding="{Binding Path=AccessesWPF}"/>
+                    <DataGridTextColumn Header="Допуски"       Width="0.6*" Binding="{Binding Path=AccessesWPF}"  IsReadOnly="True"/>
                     <DataGridTemplateColumn Width="1*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
