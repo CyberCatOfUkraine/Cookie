@@ -6,26 +6,55 @@ using System.Threading.Tasks;
 
 namespace WebUI.Models
 {
-    /// <summary>
-    /// TODO: Перекласти адресу НОРМАЛЬНО а не як зараз
-    /// </summary>
     public class Address
     {
-        public Address(string oblast, string rajon, string naseleniyPunkt, string vulicya, string budinok, string? kvartira)
+        /// <summary>
+        /// Конструктор що задає адресу
+        /// </summary>
+        /// <param name="region">Область</param>
+        /// <param name="district">Район</param>
+        /// <param name="settlement">Населений пункт</param>
+        /// <param name="street">Вулиця</param>
+        /// <param name="house">Будинок</param>
+        /// <param name="apartment">Квартира</param>
+        public Address(string region, string district, string settlement, string street, string house, string? apartment)
         {
-            Oblast = oblast;
-            Rajon = rajon;
-            NaseleniyPunkt = naseleniyPunkt;
-            Vulicya = vulicya;
-            Budinok = budinok;
-            Kvartira = kvartira;
+            Region = region;
+            District = district;
+            Settlement = settlement;
+            Street = street;
+            House = house;
+            Apartment = apartment;
         }
 
-        public string Oblast { get; set; }
-        public string Rajon { get; set; }
-        public string NaseleniyPunkt { get; set; }
-        public string Vulicya { get; set; }
-        public string Budinok { get; set; }
-        public string? Kvartira { get; set; }
+        /// <summary>
+        /// Область
+        /// </summary>
+        public string Region { get; set; }
+
+        /// <summary>
+        /// Район
+        /// </summary>
+        public string District { get; set; }
+
+        /// <summary>
+        /// Населений пункт
+        /// </summary>
+        public string Settlement { get; set; }
+
+        /// <summary>
+        /// Вулиця
+        /// </summary>
+        public string Street { get; set; }
+
+        /// <summary>
+        /// Будинок
+        /// </summary>
+        public string House { get; set; }
+
+        /// <summary>
+        /// Квартира
+        /// </summary>
+        public string? Apartment { get; set; }
     }
 }

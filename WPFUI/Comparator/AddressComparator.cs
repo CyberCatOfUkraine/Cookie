@@ -15,19 +15,19 @@ namespace WPFUI.Comparator
             if (ReferenceEquals(null, y)) return 1;
             if (ReferenceEquals(null, x)) return -1;
 
-            var xString = x.Oblast + x.Rajon + x.NaseleniyPunkt + x.Vulicya + x.Budinok + x.Kvartira;
-            var yString = y.Oblast + y.Rajon + y.NaseleniyPunkt + y.Vulicya + y.Budinok + y.Kvartira;
-            /*var oblastComparison = string.Compare(x.Oblast, y.Oblast, StringComparison.Ordinal);
+            var xString = x.Region + x.District + x.Settlement + x.Street + x.House + x.Apartment;
+            var yString = y.Region + y.District + y.Settlement + y.Street + y.House + y.Apartment;
+            /*var oblastComparison = string.Compare(x.Region, y.Region, StringComparison.Ordinal);
             if (oblastComparison != 0) return oblastComparison;
-            var rajonComparison = string.Compare(x.Rajon, y.Rajon, StringComparison.Ordinal);
+            var rajonComparison = string.Compare(x.District, y.District, StringComparison.Ordinal);
             if (rajonComparison != 0) return rajonComparison;
-            var naseleniyPunktComparison = string.Compare(x.NaseleniyPunkt, y.NaseleniyPunkt, StringComparison.Ordinal);
+            var naseleniyPunktComparison = string.Compare(x.Settlement, y.Settlement, StringComparison.Ordinal);
             if (naseleniyPunktComparison != 0) return naseleniyPunktComparison;
-            var vulicyaComparison = string.Compare(x.Vulicya, y.Vulicya, StringComparison.Ordinal);
+            var vulicyaComparison = string.Compare(x.Street, y.Street, StringComparison.Ordinal);
             if (vulicyaComparison != 0) return vulicyaComparison;
-            var budinokComparison = string.Compare(x.Budinok, y.Budinok, StringComparison.Ordinal);
+            var budinokComparison = string.Compare(x.House, y.House, StringComparison.Ordinal);
             if (budinokComparison != 0) return budinokComparison;
-            return string.Compare(x.Kvartira, y.Kvartira, StringComparison.Ordinal);*/
+            return string.Compare(x.Apartment, y.Apartment, StringComparison.Ordinal);*/
             return string.Compare(xString,yString,StringComparison.OrdinalIgnoreCase);
         }
     }
