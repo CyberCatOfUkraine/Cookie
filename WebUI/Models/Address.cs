@@ -8,6 +8,10 @@ namespace WebUI.Models
 {
     public class Address
     {
+        public Address()
+        {
+            
+        }
         /// <summary>
         /// Конструктор що задає адресу
         /// </summary>

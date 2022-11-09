@@ -8,6 +8,10 @@ namespace WebUI.Models
 {
     public class ClientMessage
     {
+        public ClientMessage()
+        {
+            
+        }
         public ClientMessage(string text, DateTime recivedTime, Address address)
         {
             Text = text;

@@ -1,31 +1,64 @@
 ﻿@{
     ViewData["Title"] = "Повідомлення";
 }
-<h1>@ViewData["Title"]</h1>
+@if (ViewBag.Message is string && ViewBag.Message != null)
+{
+    <br />
+    <br />
+    <br />
+    <h2>Ваше повідомлення було доставлено. Дякуємо за співпрацю!</h2>
+    <br/>
+    <br/>
+    <br/>
+    <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Index">На головну</a>
+}
+else
+{
+    @model ClientMessage
 
-<p>Messages controller.</p>
-
-@model UserViewModel
-
-<h1>Create</h1>
-<div class="row">
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">
-                <h5>Create a new user</h5>
+<h1>Нове повідомлення</h1>
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Повідомлення про помилку роботи електромережі</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Messages" asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label class="form-label">Ваше повідомлення</label>
+                            <input asp-for="Text" type="text" class="form-control" min="3" required=""/>
+                        </div>
+                        <br />
+                        <div class="mb-3">
+                            <h4>Введіть адресу</h4>
+                            <br /><br />
+                            <label>Область</label><br/>
+                            <input asp-for="Address.Region" type="text" min="1" required/>
+                            <br/><br/>
+                            <label>Район</label><br/>
+                            <input asp-for="Address.District" type="text" min="1" required/>
+                            <br /><br />
+                            <label>Місто/Селище/Село/Населений пункт</label><br/>
+                            <input asp-for="Address.Settlement" type="text" min="1" required/>
+                            <br/><br/>
+                            <label>Вулиця</label><br/>
+                            <input asp-for="Address.Street" type="text" min="1" required/>
+                            <br/>
+                            <label>Будинок</label><br/>
+                            <input asp-for="Address.House" type="text" min="1" required/>
+                            <br /><br />
+                            <label>Квартира</label><br/>
+                            <input asp-for="Address.Apartment" type="text" min="1"/>
+                            <br/>
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary">Відправити</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer"></div>
             </div>
-            <div class="card-body">
-                <form asp-controller="UserAdmin" asp-action="Create" method="post">
-                    <div class="mb-3">
-                        <label class="form-label">User Name</label>
-                        <input asp-for="Name" type="text" class="form-control" />
-                    </div>
-                    <div class="mb-3">
-                        <button class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-            </div>
-            <div class="card-footer"></div>
         </div>
-    </div>
-</div> 
+    </div> 
+}
