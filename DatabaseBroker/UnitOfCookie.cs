@@ -15,6 +15,7 @@ namespace DatabaseBroker
 
         public IRepository<ClientMessage> ClientMessageRepository => new ClientMessageRepository(_context);
         public IRepository<Access> AccessRepository => new AccessRepository(_context);
+        public IRepository<GeneralAccess> GeneralAccessRepository => new GeneralAccessRepository(_context);
         public IRepository<Employee> EmployeeRepository => new EmployeeRepository(_context);
         public IRepository<Pause> PauseRepository => new PauseRepository(_context);
         public IRepository<WorkTask> WorkTaskRepository => new WorkTaskRepository(_context);

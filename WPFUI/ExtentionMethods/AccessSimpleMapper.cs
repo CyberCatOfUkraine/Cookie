@@ -21,6 +21,5 @@ namespace WPFUI.ExtentionMethods
         {
             return new WPFUI.Models.Access(access.Name);
         }
-
     }
 }
