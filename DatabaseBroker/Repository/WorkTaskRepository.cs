@@ -1,4 +1,5 @@
 ﻿using DatabaseBroker.Models;
+using System.Data.Entity;
 
 namespace DatabaseBroker.Repository
 {
@@ -38,7 +39,16 @@ namespace DatabaseBroker.Repository
 
         public void Update(Predicate<WorkTask> predicate, WorkTask item)
         {
-            _context.WorkTasks.Update(predicate,item);
+            var workTask = Get(predicate);
+            _context.Entry(workTask).Entity.Name = item.Name;
+            _context.Entry(workTask).Entity.Started = item.Started;
+            _context.Entry(workTask).Entity.Finished = item.Finished;
+            _context.Entry(workTask).Entity.PausesList = item.PausesList;
+            _context.Entry(workTask).Entity.AssignedEmployees = item.AssignedEmployees;
+            _context.Entry(workTask).Entity.AssignedEmployeesAccesses = item.AssignedEmployeesAccesses;
+            _context.Entry(workTask).Entity.Addresses = item.Addresses;
+            _context.Entry(workTask).Entity.CurrentState = item.CurrentState;
+            _context.Entry(workTask).State = EntityState.Modified;
         }
 
         public void Clear()

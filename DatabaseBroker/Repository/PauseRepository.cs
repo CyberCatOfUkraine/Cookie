@@ -1,4 +1,5 @@
 ﻿using DatabaseBroker.Models;
+using System.Data.Entity;
 
 namespace DatabaseBroker.Repository
 {
@@ -38,7 +39,11 @@ namespace DatabaseBroker.Repository
 
         public void Update(Predicate<Pause> predicate, Pause item)
         {
-            _context.Pauses.Update(predicate, item);
+            var pause = Get(predicate);
+
+            _context.Entry(pause).Entity.StartedTime = item.StartedTime;
+            _context.Entry(pause).Entity.FinishedTime = item.FinishedTime;
+            _context.Entry(pause).State = EntityState.Modified;
         }
 
         public void Clear()

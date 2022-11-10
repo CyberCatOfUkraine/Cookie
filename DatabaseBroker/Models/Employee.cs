@@ -18,12 +18,5 @@ namespace DatabaseBroker.Models
         public List<Access> Accesses { get; set; }
     }
 
-    /// <summary>
-    /// Об'єкт допуску до роботи до вказаного діапазону напруг
-    /// </summary>
-    public class Access
-    {
-        [Key]
-        public string Name { get; set; }
-    }
+    
 }
