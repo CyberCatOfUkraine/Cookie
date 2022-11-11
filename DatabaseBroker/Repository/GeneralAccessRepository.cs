@@ -34,9 +34,8 @@ namespace DatabaseBroker.Repository
 
         public GeneralAccess Get(Predicate<GeneralAccess> predicate)
         {
-            return _context.GeneralAccesses.Find(predicate);
+            return GetAll().Find(predicate);
         }
-
         public List<GeneralAccess> GetAll()
         {
             return _context.GeneralAccesses.ToList();

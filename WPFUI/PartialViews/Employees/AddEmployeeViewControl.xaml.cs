@@ -37,7 +37,7 @@ namespace WPFUI.PartialViews.Employees
             InitializeComponent();
             InputAcessesGrid.Visibility = Visibility.Hidden;
             InputNameGrid.Visibility = Visibility.Visible;
-            _allAccesses = _unitOfCookie.AccessRepository.GetAll().Convert();
+            _allAccesses = _unitOfCookie.GeneralAccessRepository.GetAll().Convert();
             _selectedAccesses = new();
             EmployeeAccessesDataGrid.ItemsSource =_allAccesses;
         }

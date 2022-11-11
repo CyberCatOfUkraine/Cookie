@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DatabaseBroker;
+using DatabaseBroker.Repository;
 using MaterialDesignThemes.Wpf;
 using WPFUI.Comparator;
 using WPFUI.Models;
@@ -32,7 +33,7 @@ namespace WPFUI.PartialViews.Accesses
             InitializeComponent();
             uof = unitOfCookie;
 
-            accesses = uof.AccessRepository.Count() > 0 ? uof.AccessRepository.GetAll().Convert() : new List<Access>();
+            accesses = uof.GeneralAccessRepository.Count() > 0 ? uof.GeneralAccessRepository.GetAll().Convert() : new List<Access>();
             AccessesDataGrid.ItemsSource = accesses;
         }
 
@@ -56,8 +57,8 @@ namespace WPFUI.PartialViews.Accesses
                 var name = dataContext!.Name;
                 var access = accesses.First(x=>x.Name==name);
                 access.Name = textBox.Text;
-                uof.AccessRepository.Update(x=>x.Name==name,access.Convert());
-                uof.AccessRepository.SaveChanges();
+                uof.GeneralAccessRepository.Update(x=>x.Name==name,access.ConvertToDatabaseGeneralAcess());
+                uof.GeneralAccessRepository.SaveChanges();
             }
         }
 
@@ -88,11 +89,11 @@ namespace WPFUI.PartialViews.Accesses
                         break;
                     }
                     case 0:
-                        uof.AccessRepository.RemoveBy(x => x.Name == access.Name);
+                        uof.GeneralAccessRepository.RemoveBy(x => x.Name == access.Name);
                         AccessesDataGrid.ItemsSource = null;
                         accesses.Remove(access);
                         AccessesDataGrid.ItemsSource = accesses;
-                        uof.AccessRepository.SaveChanges();
+                        uof.GeneralAccessRepository.SaveChanges();
                         break;
                 }
             }
@@ -108,22 +109,13 @@ namespace WPFUI.PartialViews.Accesses
 
         private void RemoveAddControl()
         {
-            accesses = uof.AccessRepository.GetAll().Convert();
+            accesses = uof.GeneralAccessRepository.GetAll().Convert();
             dialogGod.Kill(AddAccessesDialogHost, AccessesDataGrid, accesses);
         }
 
         private List<Employee> EmployeesWithThisAccess(Access access)
         {
-            List<Employee> employees=new List<Employee>();
-            var databaseAccess = access.Convert();
-            foreach (var employee in uof.EmployeeRepository.GetAll())
-            {
-                if (employee.Accesses.Exists(x=>x.Name==access.Name))
-                {
-                    employees.Add(employee.Convert());
-                }
-            }
-            return employees;
+            return (from employee in uof.EmployeeRepository.GetAll() where employee.Accesses.Exists(x => x.Name == access.Name) select employee.Convert()).ToList();
         }
 
         private void AccessesViewControl_OnUnloaded(object sender, RoutedEventArgs e)

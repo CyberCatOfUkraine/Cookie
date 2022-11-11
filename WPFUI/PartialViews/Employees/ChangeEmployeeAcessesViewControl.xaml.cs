@@ -42,7 +42,7 @@ namespace WPFUI.PartialViews.Employees
         {
             _unitOfCookie = unitOfCookie;
             _employee=employee;
-            List<Access> allAccesses = _unitOfCookie.AccessRepository.GetAll().Convert();
+            List<Access> allAccesses = _unitOfCookie.GeneralAccessRepository.GetAll().Convert();
             _selectedAccesses = new();
 
             InitializeComponent();
@@ -71,6 +71,17 @@ namespace WPFUI.PartialViews.Employees
             var messageBoxResult = MessageBox.Show(text, "Редагування допуску", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
+                
+                var employeeDatabase = _unitOfCookie.EmployeeRepository.Get(x => x.Credentials == _employee.Credentials);
+                if (employeeDatabase != null && employeeDatabase.Accesses.Count > 0)
+                {
+                    foreach (var access in employeeDatabase.Accesses)
+                    {
+                        _unitOfCookie.AccessRepository.RemoveBy(x => x.Id == access.Id);
+                    }
+                }
+
+
                 _employee.Accesses = _selectedAccesses;
                 _unitOfCookie.EmployeeRepository.Update(x=>x.Id==_employee.Id,_employee.Convert());
                 _unitOfCookie.EmployeeRepository.SaveChanges();

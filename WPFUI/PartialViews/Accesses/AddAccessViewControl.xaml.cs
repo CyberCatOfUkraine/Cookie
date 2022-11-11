@@ -50,15 +50,15 @@ namespace WPFUI.PartialViews.Accesses
             var messageBoxResult = MessageBox.Show("Ви точно збираєтесь створити новий допуск", "Створення допуску",MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                    uof.AccessRepository.Create(access.Convert());
-                    uof.AccessRepository.SaveChanges();
+                    uof.GeneralAccessRepository.Create(access.ConvertToDatabaseGeneralAcess());
+                    uof.GeneralAccessRepository.SaveChanges();
             }
             RemoveThisControl.Invoke();
         }
 
         private bool IsDuplicated(Access access)
         {
-            return uof.AccessRepository.GetAll().Exists(x => x.Name == access.Name);
+            return uof.GeneralAccessRepository.GetAll().Exists(x => x.Name == access.Name);
         }
 
         private void CancelBtn_OnClick(object sender, RoutedEventArgs e)

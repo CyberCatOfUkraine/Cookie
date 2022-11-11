@@ -32,8 +32,6 @@ namespace WPFUI.PartialViews.Employees
         {
             InitializeComponent();
             _unitOfCookie = unitOfCookie;
-            //accesses = uof.AccessRepository.Count() > 0 ? uof.AccessRepository.GetAll().Convert() : new List<Access>();
-            
             _employees = _unitOfCookie.EmployeeRepository.Count() > 0 ? _unitOfCookie.EmployeeRepository.GetAll().Convert() : new List<Employee>();
             EmployeesDataGrid.ItemsSource = _employees;
             dialog = new DialogGod<Employee>(new EmployeeComparator());
@@ -56,11 +54,28 @@ namespace WPFUI.PartialViews.Employees
 
         private void DeleteEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
         {
+
+
+            _unitOfCookie.EmployeeRepository.SaveChanges();
+            _unitOfCookie.AccessRepository.SaveChanges();
             var employee = EmployeesDataGrid.CurrentItem as Employee;
+            var employeeDatabase = _unitOfCookie.EmployeeRepository.Get(x => x.Credentials == employee.Credentials);
+            if (employeeDatabase != null && employeeDatabase.Accesses.Count>0)
+            {
+                var accesses = employeeDatabase.Accesses.Convert();
+                foreach (var access in accesses)
+                {
+                    _unitOfCookie.AccessRepository.RemoveBy(x=>x.Id==access.Id);
+                }
+            }
+            
             _unitOfCookie.EmployeeRepository.RemoveBy(x=>x.Id==employee.Id);
             _employees.Remove(employee);
             EmployeesDataGrid.ItemsSource = null;
             EmployeesDataGrid.ItemsSource = _employees;
+
+            _unitOfCookie.EmployeeRepository.SaveChanges();
+            _unitOfCookie.AccessRepository.SaveChanges();
         }
 
         private void ChangeEmployeeAccessesBtn_OnClick(object sender, RoutedEventArgs e)

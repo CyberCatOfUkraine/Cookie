@@ -15,7 +15,7 @@ namespace WPFUI.ExtentionMethods
 
         internal static List<DatabaseBroker.Models.Employee> Convert(this List<WPFUI.Models.Employee> employees)
         {
-            return (from employee in employees select  new DatabaseBroker.Models.Employee{Id = employee.Id,Accesses = employee.Accesses.Convert(),Credentials = employee.Credentials}).ToList();
+            return (from employee in employees select  new DatabaseBroker.Models.Employee{Id = employee.Id,Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials}).ToList();
         }
 
         internal static WPFUI.Models.Employee Convert(this DatabaseBroker.Models.Employee employee)
@@ -25,7 +25,7 @@ namespace WPFUI.ExtentionMethods
 
         internal static DatabaseBroker.Models.Employee Convert(this WPFUI.Models.Employee employee)
         {
-            return new DatabaseBroker.Models.Employee{Accesses = employee.Accesses.Convert(),Credentials = employee.Credentials,Id = employee.Id};
+            return new DatabaseBroker.Models.Employee{Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials,Id = employee.Id};
         }
 
     }
