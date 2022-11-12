@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Map\Index.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Map\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Messages\Index.cshtml" />
   </ItemGroup>
 
@@ -20,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseBroker\DatabaseBroker.csproj" />
+    <ProjectReference Include="..\Cookie\Cookie.csproj" />
   </ItemGroup>
 
 </Project>

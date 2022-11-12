@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cookie;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Models;
 
 namespace WebUI.Controllers
@@ -17,6 +19,9 @@ namespace WebUI.Controllers
         public IActionResult Create(ClientMessage message)
         {
             message.RecivedTime=DateTime.Now;
+
+            MessagesTextWriter.WriteToFile(JsonConvert.SerializeObject(message));
+
             TempData["Message"] = message.Text;
             return RedirectToAction(nameof(Index));
         }
