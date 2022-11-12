@@ -42,7 +42,7 @@ namespace WPFUI.PartialViews.Employees
             EmployeeAccessesDataGrid.ItemsSource =_allAccesses;
         }
 
-
+        private bool IsProcessed = false;
         private void AddEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(NameTextBox.Text))
@@ -61,9 +61,14 @@ namespace WPFUI.PartialViews.Employees
             var messageBoxResult = MessageBox.Show(text, "Створення допуску", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                Employee employee = new Employee(NameTextBox.Text, _selectedAccesses);
-                _unitOfCookie.EmployeeRepository.Create(employee.Convert());
-                _unitOfCookie.EmployeeRepository.SaveChanges();
+                if (!IsProcessed)
+                {
+                    Employee employee = new Employee(NameTextBox.Text, _selectedAccesses);
+                    _unitOfCookie.EmployeeRepository.Create(employee.Convert());
+                    _unitOfCookie.EmployeeRepository.SaveChanges();
+                }
+
+                IsProcessed = true;
             }
             CloseThisControl();
         }

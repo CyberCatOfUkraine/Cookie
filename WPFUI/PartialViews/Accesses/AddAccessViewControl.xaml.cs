@@ -31,6 +31,8 @@ namespace WPFUI.PartialViews.Accesses
             InitializeComponent();
             this.uof = uof;
         }
+
+        private bool IsProcessed = false;
         private void AddAccessBtn_OnClick(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(NameTextBox.Text))
@@ -50,8 +52,13 @@ namespace WPFUI.PartialViews.Accesses
             var messageBoxResult = MessageBox.Show("Ви точно збираєтесь створити новий допуск", "Створення допуску",MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
+                if (!IsProcessed)
+                {
                     uof.GeneralAccessRepository.Create(access.ConvertToDatabaseGeneralAcess());
                     uof.GeneralAccessRepository.SaveChanges();
+                }
+
+                IsProcessed = true;
             }
             RemoveThisControl.Invoke();
         }
