@@ -14,5 +14,7 @@ namespace DatabaseBroker.Models
         public string Text { get; set; }
         public DateTime RecivedTime { get; set; }
         public Address Address { get; set; }
+        public bool IsProcessed { get; set; }
+
     }
 }

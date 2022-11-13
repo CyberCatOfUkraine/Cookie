@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cookie\Cookie.csproj" />
     <ProjectReference Include="..\DatabaseBroker\DatabaseBroker.csproj" />
     <ProjectReference Include="..\MessageBroker\MessageBroker.csproj" />
   </ItemGroup>
@@ -40,5 +41,4 @@
     <Resource Include="LoadingWindow\minecraft_cookie_icon.png" />
     <Resource Include="minecraft_cookie_icon.png" />
   </ItemGroup>
-
 </Project>

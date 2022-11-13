@@ -21,7 +21,7 @@ namespace WebUI.Controllers
             message.RecivedTime=DateTime.Now;
 
             MessagesTextWriter.WriteToFile(JsonConvert.SerializeObject(message));
-
+            message.IsProcessed = false;
             TempData["Message"] = message.Text;
             return RedirectToAction(nameof(Index));
         }

@@ -7,28 +7,22 @@ using System.Threading.Tasks;
 
 namespace Cookie
 {
-    internal static class MessagesTextReader
+    public static class MessagesTextReader
     {
+        public static List<string> DeletableFilesList = new();
         public static string[] ReadFromFiles()
         {
-           return ReadFromFiles(GeneralStrings.ClientMessagesDirectoryPath).Result;
-        }
-
-        private static async Task<string[]> ReadFromFiles(string directoryPath)
-        {
-            var files = Directory.EnumerateFiles(directoryPath);
+            var files = Directory.EnumerateFiles(GeneralStrings.ClientMessagesDirectoryPath);
 
             var filesTextList = new List<string>();
             foreach (var file in files)
             {
-                var fileReader = new StreamReader(file);
-                filesTextList.Add(await fileReader.ReadToEndAsync());
-                fileReader.Close();
+                filesTextList.Add(File.ReadAllText(file));
             }
 
             foreach (var file in files)
             {
-                File.Delete(file);
+                DeletableFilesList.Add(file);
             }
 
             return filesTextList.ToArray();

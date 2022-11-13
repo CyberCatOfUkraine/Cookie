@@ -56,5 +56,7 @@ namespace WPFUI.Models
         /// Квартира
         /// </summary>
         public string? Apartment { get; set; }
+        public int Id { get; set; }
+
     }
 }

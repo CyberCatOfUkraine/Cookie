@@ -44,6 +44,7 @@ namespace DatabaseBroker.Repository
             _context.Entry(clientMessage).Entity.Text = item.Text;
             _context.Entry(clientMessage).Entity.RecivedTime = item.RecivedTime;
             _context.Entry(clientMessage).Entity.Address = item.Address;
+            _context.Entry(clientMessage).Entity.IsProcessed = item.IsProcessed;
             _context.Entry(clientMessage).State = EntityState.Modified;
         }
 

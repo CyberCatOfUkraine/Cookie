@@ -6,9 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DatabaseBroker\DatabaseBroker.csproj" />
-    <ProjectReference Include="..\MessageBroker\MessageBroker.csproj" />
-  </ItemGroup>
-
 </Project>

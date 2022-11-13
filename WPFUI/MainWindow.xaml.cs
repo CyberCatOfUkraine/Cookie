@@ -52,7 +52,7 @@ namespace WPFUI
 
         private void MessageBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            AddViewControlToContainer(new MessageViewControl(),"Повідомлення");
+            AddViewControlToContainer(new MessageViewControl(_unitOfCookie),"Повідомлення");
         }
         private void AddViewControlToContainer(UIElement viewControl, string title)
         {
