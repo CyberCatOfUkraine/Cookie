@@ -10,11 +10,19 @@ namespace WPFUI.ExtentionMethods
     {
         internal static List<WPFUI.Models.Employee> Convert(this List<DatabaseBroker.Models.Employee> employees)
         {
+            if (employees == null)
+            {
+                return new List<WPFUI.Models.Employee>();
+            }
             return (from employee in employees select  new WPFUI.Models.Employee(employee.Credentials,employee.Accesses.Convert()){Id = employee.Id}).ToList();
         }
 
         internal static List<DatabaseBroker.Models.Employee> Convert(this List<WPFUI.Models.Employee> employees)
         {
+            if (employees==null)
+            {
+                return new List<DatabaseBroker.Models.Employee>();
+            }
             return (from employee in employees select  new DatabaseBroker.Models.Employee{Id = employee.Id,Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials}).ToList();
         }
 

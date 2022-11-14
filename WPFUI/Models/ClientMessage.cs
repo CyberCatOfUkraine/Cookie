@@ -24,12 +24,22 @@ namespace WPFUI.Models
 
         public Address Address { get; set; }
 
-        public string AddressWPF => Address.Region + Environment.NewLine +
-                                    Address.District + Environment.NewLine +
-                                    Address.Settlement + Environment.NewLine +
-                                    Address.Street + Environment.NewLine +
-                                    Address.House + Environment.NewLine +
-                                    Address.Apartment;
+        public string AddressWPF =>
+            Address.Apartment == null
+                ? 
+                "Область:         " + Address.Region + Environment.NewLine +
+                "Район:           " + Address.District + Environment.NewLine +
+                "Населений пункт: " + Address.Settlement + Environment.NewLine +
+                "Вулиця:          " + Address.Street + Environment.NewLine +
+                "Будинок:         " + Address.House + Environment.NewLine
+                : 
+                "Область:         " + Address.Region + Environment.NewLine +
+                "Район:           " + Address.District + Environment.NewLine +
+                "Населений пункт: " + Address.Settlement + Environment.NewLine +
+                "Вулиця:          " + Address.Street + Environment.NewLine +
+                "Будинок:         " + Address.House + Environment.NewLine +
+                "Квартира:        " + Address.Apartment;
+
         public bool IsProcessed { get; set; }
 
     }

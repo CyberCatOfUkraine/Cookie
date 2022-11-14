@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DatabaseBroker;
+using WPFUI.ExtentionMethods;
 using WPFUI.Models;
+using ClientMessage = WPFUI.Models.ClientMessage;
 
 namespace WPFUI.PartialViews.Message
 {
@@ -25,23 +27,41 @@ namespace WPFUI.PartialViews.Message
         private readonly UnitOfCookie _unitOfCookie;
         private readonly ClientMessage _clientMessage;
         public Action RemoveThisControl;
+        private string accessName;
         public ProcessMessageViewControl(UnitOfCookie unitOfCookie,ClientMessage clientMessage)
         {
             _unitOfCookie = unitOfCookie;
             _clientMessage = clientMessage;
             InitializeComponent();
             MessageTextBlock.Text = clientMessage.Text;
+            
             foreach (var generalAccess in _unitOfCookie.GeneralAccessRepository.GetAll())
             {
-                AccessesComboBox.Items.Add(generalAccess);
+                AccessesComboBox.Items.Add(generalAccess.Name);
             }
-            
+
+            if (AccessesComboBox.Items.Count>0)
+            {
+                AccessesComboBox.SelectedItem = AccessesComboBox.Items[0];
+            }
             
         }
 
         private void SubmitBtn_OnClick(object sender, RoutedEventArgs e)
         {
-
+            if (accessName==null)
+            {
+                MessageBox.Show("Неможливе подальше оброблення повідомлення без допусків.");
+                return;
+            }
+            _unitOfCookie.ClientMessageRepository.Create(_clientMessage.Convert());
+            WorkTask task = new(MessageTextBlock.Text);
+            task.Started=DateTime.UnixEpoch;
+            task.Finished=DateTime.UnixEpoch;
+            task.AssignedEmployeesAccesses = new () { new Access(accessName) };
+            _unitOfCookie.WorkTaskRepository.Create(task.Convert());
+            _unitOfCookie.WorkTaskRepository.SaveChanges();
+            
             CloseThisControl();
         }
 
@@ -58,8 +78,7 @@ namespace WPFUI.PartialViews.Message
         private void Access_Selected(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
-            ComboBoxItem selectedItem = (ComboBoxItem)comboBox.SelectedItem;
-            MessageBox.Show(selectedItem.Content.ToString());
+            accessName= comboBox.SelectedItem.ToString();
         }
     }
 }

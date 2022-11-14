@@ -17,20 +17,21 @@
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Label HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,40,0,0">Текст:</Label>
                 <Border Margin="20,70,20,40" CornerRadius="3" BorderThickness="1" BorderBrush="Black">
-                    <TextBlock  Name="MessageTextBlock" Margin="4">Something broken, if you see it</TextBlock>
+                    <TextBlock TextWrapping="Wrap" Name="MessageTextBlock" Margin="4"
+                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                               ScrollViewer.VerticalScrollBarVisibility="Auto"
+                               >Something broken, if you see it </TextBlock>
                 </Border>
             </Grid>
             <Grid Grid.Column="1">
                 <Label VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,40,0,0">Виберіть потрібний допуск:</Label>
-                <Border Margin="20,70,20,40" CornerRadius="3" BorderThickness="1" BorderBrush="Black">
-                    <ComboBox Height="25" Width="150" Name="AccessesComboBox" SelectionChanged="Access_Selected">
-                    </ComboBox>
-                </Border>
+                <ComboBox Height="25" Name="AccessesComboBox" SelectionChanged="Access_Selected" Margin="20,70,20,40" Background="#FFF1F0F0">
+                </ComboBox>
             </Grid>
         </Grid>
         <Grid Grid.Row="1">

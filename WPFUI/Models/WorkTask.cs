@@ -8,6 +8,11 @@ namespace WPFUI.Models
 {
     public class WorkTask
     {
+
+        public WorkTask(string name)
+        {
+            Name = name;
+        }
         public WorkTask(DateTime started, DateTime finished, List<Pause> pausesList, List<Employee> assignedEmployees, TaskState currentState, List<Address> addresses, string name, List<Access> assignedEmployeesAccesses)
         {
             Started = started;

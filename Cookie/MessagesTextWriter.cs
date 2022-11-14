@@ -16,14 +16,13 @@ namespace Cookie
 
         private static async void WriteToFile(string text, string directoryPath)
         {
-            string dateTime= 
-                DateTime.Now.Year+"_"+
-                DateTime.Now.Month+"_"+ 
-                DateTime.Now.Day+"_"+
-                DateTime.Now.Hour + "_" + 
-                DateTime.Now.Minute + "_" + 
-                DateTime.Now.Second + "_" + 
-                DateTime.Now.Millisecond;
+            string dateTime =
+                DateTime.Now.Year + "_" +
+                DateTime.Now.Month + "_" +
+                DateTime.Now.Day + "_" +
+                DateTime.Now.Hour + "_" +
+                DateTime.Now.Minute + "_" +
+                DateTime.Now.Second + "_";
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
