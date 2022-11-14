@@ -5,10 +5,11 @@ namespace WPFUI.Models
 {
     public class Employee
     {
-        public Employee(string credentials, List<Access> accesses)
+        public Employee(string credentials, List<Access> accesses, long telegramId)
         {
             Credentials = credentials;
             Accesses = accesses;
+            TelegramId = telegramId;
         }
 
         public int Id { get; set; }
@@ -22,6 +23,9 @@ namespace WPFUI.Models
         /// </summary>
         public List<Access> Accesses { get; set; }
 
+        /// <summary>
+        /// Допуски до роботи до вказаного діапазону напруг в одному рядку
+        /// </summary>
         public string AccessesWPF
         {
             get
@@ -34,5 +38,10 @@ namespace WPFUI.Models
                 return stringBuilder.ToString();
             }
         }
+
+        /// <summary>
+        /// ID особистого облікового запису в Телеграм, куди будуть доставлятися повідомлення про задачі 
+        /// </summary>
+        public long TelegramId { get; set; }
     }
 }

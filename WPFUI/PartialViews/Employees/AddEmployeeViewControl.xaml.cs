@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +51,18 @@ namespace WPFUI.PartialViews.Employees
                 MessageBox.Show("Неможливо створити співробітника з пустими даними!");
                 return;
             }
+            
+            if (string.IsNullOrEmpty(TelegramIdTextBox.Text))
+            {
+                MessageBox.Show("Неможливо створити співробітника без Telegram ID!");
+                return;
+            }
+
+            if (!long.TryParse(TelegramIdTextBox.Text,out var telegramId))
+            {
+                MessageBox.Show("Введіть Telegram ID цифрами!");
+                return;
+            }
 
             if (_unitOfCookie.EmployeeRepository.Get(x=>x.Credentials== NameTextBox.Text)!=null)
             {
@@ -63,7 +76,7 @@ namespace WPFUI.PartialViews.Employees
             {
                 if (!IsProcessed)
                 {
-                    Employee employee = new Employee(NameTextBox.Text, _selectedAccesses);
+                    Employee employee = new Employee(NameTextBox.Text, _selectedAccesses, telegramId);
                     _unitOfCookie.EmployeeRepository.Create(employee.Convert());
                     _unitOfCookie.EmployeeRepository.SaveChanges();
                 }

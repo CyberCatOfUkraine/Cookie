@@ -16,6 +16,11 @@ namespace DatabaseBroker.Models
         /// Допуски до роботи до вказаного діапазону напруг
         /// </summary>
         public List<Access> Accesses { get; set; }
+
+        /// <summary>
+        /// ID особистого облікового запису в Телеграм, куди будуть доставлятися повідомлення про задачі 
+        /// </summary>
+        public long TelegramID { get; set; }
     }
 
     

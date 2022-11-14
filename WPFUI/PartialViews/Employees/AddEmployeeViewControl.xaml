@@ -32,8 +32,14 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >ПІБ:</TextBlock>
-                    <TextBox Grid.Column="1" MinWidth="220" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto" Name="NameTextBox"></TextBox>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >ПІБ:</TextBlock>
+                    <TextBox Grid.Row="0" Grid.Column="1" MinWidth="220" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto" Name="NameTextBox"></TextBox>
+                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" >Telegram ID:</TextBlock>
+                    <TextBox Grid.Row="1" Grid.Column="1" MinWidth="220" VerticalAlignment="Center" HorizontalAlignment="Center" HorizontalScrollBarVisibility="Auto" Name="TelegramIdTextBox"></TextBox>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Button HorizontalAlignment="Center"
@@ -42,7 +48,7 @@
             </Grid>
         </Grid>
 
-        <Grid Name="InputAcessesGrid" Grid.Row="0" Grid.RowSpan="2">
+        <Grid Name="InputAcessesGrid" Visibility="Visible" Grid.Row="0" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"/>
                 <RowDefinition/>

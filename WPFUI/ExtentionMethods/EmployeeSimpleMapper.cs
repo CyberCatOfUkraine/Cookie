@@ -14,7 +14,7 @@ namespace WPFUI.ExtentionMethods
             {
                 return new List<WPFUI.Models.Employee>();
             }
-            return (from employee in employees select  new WPFUI.Models.Employee(employee.Credentials,employee.Accesses.Convert()){Id = employee.Id}).ToList();
+            return (from employee in employees select  new WPFUI.Models.Employee(employee.Credentials,employee.Accesses.Convert(),employee.TelegramID){Id = employee.Id}).ToList();
         }
 
         internal static List<DatabaseBroker.Models.Employee> Convert(this List<WPFUI.Models.Employee> employees)
@@ -23,17 +23,17 @@ namespace WPFUI.ExtentionMethods
             {
                 return new List<DatabaseBroker.Models.Employee>();
             }
-            return (from employee in employees select  new DatabaseBroker.Models.Employee{Id = employee.Id,Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials}).ToList();
+            return (from employee in employees select  new DatabaseBroker.Models.Employee{Id = employee.Id,Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials,TelegramID = employee.TelegramId}).ToList();
         }
 
         internal static WPFUI.Models.Employee Convert(this DatabaseBroker.Models.Employee employee)
         {
-            return new WPFUI.Models.Employee(employee.Credentials, employee.Accesses.Convert()) { Id = employee.Id };
+            return new WPFUI.Models.Employee(employee.Credentials, employee.Accesses.Convert(), employee.TelegramID) { Id = employee.Id };
         }
 
         internal static DatabaseBroker.Models.Employee Convert(this WPFUI.Models.Employee employee)
         {
-            return new DatabaseBroker.Models.Employee{Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials,Id = employee.Id};
+            return new DatabaseBroker.Models.Employee{Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials,Id = employee.Id,TelegramID = employee.TelegramId};
         }
 
     }

@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DatabaseBroker;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TaskState = DatabaseBroker.Models.TaskState;
 
 namespace WPFUI.PartialViews.Statistic
 {
@@ -20,9 +10,15 @@ namespace WPFUI.PartialViews.Statistic
     /// </summary>
     public partial class StatisticViewControl : UserControl
     {
-        public StatisticViewControl()
+        private readonly UnitOfCookie _unitOfCookie;
+        public StatisticViewControl(UnitOfCookie unitOfCookie)
         {
+            _unitOfCookie = unitOfCookie;
             InitializeComponent();
+            string employeeCount=(_unitOfCookie.EmployeeRepository.Count()-_unitOfCookie.WorkTaskRepository.Count()).ToString();
+            EmployeeCountLabel.Content = employeeCount;
+            TaskCountLabel.Content =
+                _unitOfCookie.WorkTaskRepository.GetAll().Count(x => x.CurrentState == TaskState.Started);
         }
     }
 }

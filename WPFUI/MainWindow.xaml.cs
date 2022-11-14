@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using DatabaseBroker;
-using WPFUI.LoadingWindow;
+using MessageBroker.TelegramBroker;
 using WPFUI.PartialViews;
 using WPFUI.PartialViews.Accesses;
 using WPFUI.PartialViews.Employees;
-using WPFUI.PartialViews.Map;
 using WPFUI.PartialViews.Message;
 using WPFUI.PartialViews.Statistic;
 
@@ -27,27 +23,29 @@ namespace WPFUI
             TasksBtn.Focus();
             TasksBtn_OnClick(null, null);
             _unitOfCookie = unitOfCookie;
+
+            broker = new Broker();
+            broker.LoadTelegramBot();
         }
 
+        private Broker broker;
+
+        ~MainWindow()
+        {
+         GC.KeepAlive(broker);   
+        }
         private void TasksBtn_OnClick(object sender, RoutedEventArgs e)
         {
             
-            AddViewControlToContainer(new TasksViewControl(), "Задачі");
+            AddViewControlToContainer(new TasksViewControl(_unitOfCookie,broker), "Задачі");
         }
         private void EmployeesBtn_OnClick(object sender, RoutedEventArgs e)
         {
             AddViewControlToContainer(new EmployeesViewControl(_unitOfCookie),"Співробітники");
         }
-
-        private void MapBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-
-            AddViewControlToContainer(new MapViewControl(), "Карта");
-        }
-
         private void StatisticBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            AddViewControlToContainer(new StatisticViewControl(),"Статистика");
+            AddViewControlToContainer(new StatisticViewControl(_unitOfCookie),"Статистика");
         }
 
         private void MessageBtn_OnClick(object sender, RoutedEventArgs e)
@@ -64,7 +62,5 @@ namespace WPFUI
         {
             AddViewControlToContainer(new AccessesViewControl(_unitOfCookie),"Допуски співробітників");
         }
-
-        public event Action FinalyDataLoadded;
     }
 }

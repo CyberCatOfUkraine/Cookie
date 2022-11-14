@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DatabaseBroker;
+using MessageBroker.TelegramBroker;
 
 namespace WPFUI.PartialViews
 {
@@ -20,9 +22,18 @@ namespace WPFUI.PartialViews
     /// </summary>
     public partial class TasksViewControl : UserControl
     {
+        private readonly UnitOfCookie _unitOfCookie;
+        private readonly Broker _broker;
+        public TasksViewControl(UnitOfCookie unitOfCookie, Broker broker)
+        {
+            _unitOfCookie = unitOfCookie;
+            _broker = broker;
+        }
         public TasksViewControl()
         {
             InitializeComponent();
         }
+
+        
     }
 }

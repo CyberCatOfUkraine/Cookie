@@ -35,10 +35,6 @@
                     Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
                     Name="AccessesBtn" Click="AccessesBtn_OnClick"/>
             <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
-                    Content="Карта" HorizontalAlignment="Left" 
-                    Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
-                    Name="MapBtn" Click="MapBtn_OnClick"/>
-            <Button Style="{DynamicResource MaterialDesignRaisedButton}" 
                     Content="Статистика" HorizontalAlignment="Left" 
                     Margin="20,10,0,10" Background="AntiqueWhite" Width="140"
                     Name="StatisticBtn" Click="StatisticBtn_OnClick"/>
