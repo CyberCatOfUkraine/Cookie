@@ -18,11 +18,12 @@ namespace WPFUI
         private UnitOfCookie _unitOfCookie;
         public MainWindow(UnitOfCookie unitOfCookie)
         {
+            _unitOfCookie = unitOfCookie;
+
             InitializeComponent();
 
             TasksBtn.Focus();
             TasksBtn_OnClick(null, null);
-            _unitOfCookie = unitOfCookie;
 
             broker = new Broker();
             broker.LoadTelegramBot();

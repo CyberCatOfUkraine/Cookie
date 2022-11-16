@@ -58,6 +58,8 @@ namespace WPFUI.PartialViews.Message
             WorkTask task = new(MessageTextBlock.Text);
             task.Started=DateTime.UnixEpoch;
             task.Finished=DateTime.UnixEpoch;
+            task.Addresses = new List<Address>() { _clientMessage.Address };
+            task.CurrentState = TaskState.Created;
             task.AssignedEmployeesAccesses = new () { new Access(accessName) };
             _unitOfCookie.WorkTaskRepository.Create(task.Convert());
             _unitOfCookie.WorkTaskRepository.SaveChanges();

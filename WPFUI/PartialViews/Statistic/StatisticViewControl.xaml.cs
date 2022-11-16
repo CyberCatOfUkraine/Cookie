@@ -15,7 +15,7 @@ namespace WPFUI.PartialViews.Statistic
         {
             _unitOfCookie = unitOfCookie;
             InitializeComponent();
-            string employeeCount=(_unitOfCookie.EmployeeRepository.Count()-_unitOfCookie.WorkTaskRepository.Count()).ToString();
+            string employeeCount=(_unitOfCookie.EmployeeRepository.Count()-_unitOfCookie.WorkTaskRepository.GetAll().Count(x => x.CurrentState == TaskState.Started)).ToString();
             EmployeeCountLabel.Content = employeeCount;
             TaskCountLabel.Content =
                 _unitOfCookie.WorkTaskRepository.GetAll().Count(x => x.CurrentState == TaskState.Started);

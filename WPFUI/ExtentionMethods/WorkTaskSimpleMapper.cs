@@ -11,10 +11,16 @@ namespace WPFUI.ExtentionMethods
     {
         public static List<DatabaseBroker.Models.WorkTask> ConvertDatabaseAcesses(this List<WPFUI.Models.WorkTask> tasks)
         {
+            if (tasks==null)
+            {
+                return new List<DatabaseBroker.Models.WorkTask>();
+            }
             return (from task in tasks select new DatabaseBroker.Models.WorkTask() { }).ToList();
         }
         public static List<WPFUI.Models.WorkTask> Convert(this List<DatabaseBroker.Models.WorkTask> tasks)
         {
+            if (tasks == null)
+                return new List<WorkTask>();
             return (from task in tasks select new WPFUI.Models.WorkTask(task.Started, task.Finished, task.PausesList.Convert(), task.AssignedEmployees.Convert(), (TaskState)(int)task.CurrentState, task.Addresses.ConvertToWPFAddress(), task.Name, task.AssignedEmployeesAccesses.Convert()) { Id = task.Id }).ToList();
         }
         public static DatabaseBroker.Models.WorkTask Convert(this WPFUI.Models.WorkTask task)

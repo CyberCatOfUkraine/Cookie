@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DatabaseBroker;
 using MessageBroker.TelegramBroker;
+using WPFUI.ExtentionMethods;
 
 namespace WPFUI.PartialViews
 {
@@ -26,14 +27,17 @@ namespace WPFUI.PartialViews
         private readonly Broker _broker;
         public TasksViewControl(UnitOfCookie unitOfCookie, Broker broker)
         {
+
             _unitOfCookie = unitOfCookie;
             _broker = broker;
-        }
-        public TasksViewControl()
-        {
             InitializeComponent();
+            TasksDataGrid.ItemsSource = _unitOfCookie.WorkTaskRepository.GetAll().Convert();
         }
 
-        
+
+        private void AssignEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

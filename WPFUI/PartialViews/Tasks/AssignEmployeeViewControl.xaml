@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="WPFUI.PartialViews.Tasks.AssignEmployeeViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPFUI.PartialViews.Tasks"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+            
+             d:DesignHeight="350" d:DesignWidth="700"
+             MinHeight="350" MinWidth="700">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Label VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,40,0,0">Призначте співробітника:</Label>
+            <ComboBox Height="25" Name="EmployeeComboBox" SelectionChanged="EmployeeComboBox_OnSelectionChanged_Selected" Margin="20,70,20,40" Width="400" MinWidth="400" Background="#FFF1F0F0">
+            </ComboBox>
+
+        </Grid>
+        <Grid Grid.Row="1">
+
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="SubmitBtn" Style="{DynamicResource MaterialDesignRaisedAccentButton}" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" 
+                        Background="AntiqueWhite"  Click="SubmitBtn_OnClick"
+                >Призначити</Button>
+                <Button Grid.Column="1" Name="CancelBtn" Style="{DynamicResource MaterialDesignRaisedAccentButton}" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" 
+                        Background="AntiqueWhite" Click="CancelBtn_OnClick"
+                >Скасувати</Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
