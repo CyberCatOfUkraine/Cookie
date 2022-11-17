@@ -73,15 +73,15 @@ namespace MessageBroker.TelegramBroker.User
                {
                    new[]
                    {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleClient)
+                       InlineKeyboardButton.WithCallbackData(BotStrings.Client)
                    },
                    new[]
                    {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleElectrician)
+                       InlineKeyboardButton.WithCallbackData(BotStrings.Electrician)
                    },
                    new[]
                    {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleEngineer)
+                       InlineKeyboardButton.WithCallbackData(BotStrings.Engineer)
                    }
                };
             }

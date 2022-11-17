@@ -68,10 +68,16 @@ namespace MessageBroker.TelegramBroker
         {
             if (IsExistInDb(chatId))
             {
-                users.Find(x=>x.ChatId==chatId)!.Role=role;
-                users.Find(x=>x.ChatId==chatId)!.KeyboardMarkup=ChangeMarkupByRole(role);
-                return;    
+                var user = users.Find(x => x.ChatId == chatId);
+                user.Role = role;
+                user.KeyboardMarkup = ChangeMarkupByRole(role);
+
+                var index = users.IndexOf(user);
+                users.RemoveAt(index);
+                users.Insert(index, user);
+                return;
             }
+
             Console.WriteLine("Current user not exist! On ChangeStatus");
 
         }

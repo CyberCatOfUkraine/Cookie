@@ -28,9 +28,11 @@ namespace MessageBroker.TelegramBroker
 
         #region Change Role
 
-        public static readonly string UpdateRoleElectrician = "Електрик";
-        public static readonly string UpdateRoleEngineer = "Інженер";
-        public static readonly string UpdateRoleClient = "Клієнт";
+        public static readonly string Electrician = "Електрик";
+        public static readonly string Engineer = "Інженер";
+        public static readonly string Client = "Клієнт";
+        public static readonly string RoleChangedOn = "Поточний рівень доступу змінено на:  ";
+
         #endregion
 
         #region Invalid input
@@ -60,6 +62,7 @@ namespace MessageBroker.TelegramBroker
         public static readonly string ElectricianIntro = "Доступні наступні функції:\n" +
                                                          "1)Перегляд доступних завдань" +
                                                          "2)Звітування щодо стану отриманого завдання";
+        public static readonly string CheckRoleAndTryChangeItIntro = "Також Ви можете перевірити доступні вашому рівню доступу функції або відправити запит щодо зміни рівня доступу до даних:\n";
         #endregion
     }
 }

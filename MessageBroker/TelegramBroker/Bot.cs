@@ -50,32 +50,40 @@ namespace MessageBroker.TelegramBroker
                             cancellationToken: cancellationToken);
                         await botClient.SendTextMessageAsync(message.Chat,
                             UserOperationMikroWrapper.Instance.GetDefaultIntroByChatId(chatId),
-                            cancellationToken: cancellationToken,replyMarkup:wrapper.GetKeyboardMarkupByChatId(chatId));
-                    }/*else if (message.Text.Equals("i"))
+                            cancellationToken: cancellationToken,
+                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+
+                        await botClient.SendTextMessageAsync(chatId, BotStrings.CheckRoleAndTryChangeItIntro,
+                            cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);
+                    }
+                    /*else if (message.Text.Equals("i"))
                     {
                         UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Engineer);
 
                         await botClient.SendTextMessageAsync(message.Chat, "You engineer now",
                             cancellationToken: cancellationToken);
-                    }else if (message.Text.Equals("e"))
+                    }
+                    else if (message.Text.Equals("e"))
                     {
                         UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Electrician);
 
                         await botClient.SendTextMessageAsync(message.Chat, "You electrician now",
                             cancellationToken: cancellationToken);
-                    }else if (message.Text.Equals("c"))
+                    }
+                    else if (message.Text.Equals("c"))
                     {
                         UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Client);
                         await botClient.SendTextMessageAsync(message.Chat, "You client now",
                             cancellationToken: cancellationToken);
-                    }else if (message.Text.Equals("Check"))
+                    }
+                    else if (message.Text.Equals("Check"))
                     {
                         var role = UserOperationMikroWrapper.Instance.GetRoleChatById(chatId);
                         var markup = UserOperationMikroWrapper.Instance.GetKeyboardMarkupByChatId(chatId);
                         await botClient.SendTextMessageAsync(message.Chat,
                             "Status:" + role,
-                            cancellationToken: cancellationToken, replyMarkup: markup);}
-*/
+                            cancellationToken: cancellationToken, replyMarkup: markup);
+                    }*/
 
                     else
                     {
@@ -121,11 +129,31 @@ namespace MessageBroker.TelegramBroker
                     await botClient.SendTextMessageAsync(chatId, BotStrings.ChooseRole,
                         cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.ChangeRoleKeyboardMarkup);
                 }
-
-                
-
+                if (update.CallbackQuery.Data == BotStrings.Engineer)
+                {
+                    TryChangeRole(chatId,RoleEnum.Engineer);
+                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Engineer,
+                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                }
+                if (update.CallbackQuery.Data == BotStrings.Electrician)
+                {
+                    TryChangeRole(chatId,RoleEnum.Electrician);
+                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Electrician,
+                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                }
+                if (update.CallbackQuery.Data == BotStrings.Client)
+                {
+                    TryChangeRole(chatId,RoleEnum.Client);
+                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Client,
+                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                }
             }
 
+        }
+
+        private void TryChangeRole(long chatId, RoleEnum roleEnum)
+        {
+            UserOperationMikroWrapper.Instance.ChangeStatus(chatId, roleEnum);
         }
 
         public async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception,
