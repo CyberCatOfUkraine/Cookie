@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using DatabaseBroker;
 using MessageBroker.TelegramBroker;
 using WPFUI.ExtentionMethods;
+using WPFUI.Models;
 
 namespace WPFUI.PartialViews
 {
@@ -31,13 +32,15 @@ namespace WPFUI.PartialViews
             _unitOfCookie = unitOfCookie;
             _broker = broker;
             InitializeComponent();
-            TasksDataGrid.ItemsSource = _unitOfCookie.WorkTaskRepository.GetAll().Convert();
+            
         }
 
 
         private void AssignEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            
+            MessageBox.Show(new Random().Next(-2, 2) > 0
+                ? "Задачу призначено вільного співробітника"
+                : "Задачу перепризначено  на вільного співробітника ");
         }
     }
 }

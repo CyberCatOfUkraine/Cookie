@@ -20,6 +20,7 @@ using WPFUI.Models;
 using WPFUI.PartialViews.Employees;
 using Cookie;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace WPFUI.PartialViews.Message
 {
@@ -84,6 +85,20 @@ namespace WPFUI.PartialViews.Message
                File.Delete(pair.Value);
             }
             dialog.Kill(ClientMessagesDialogHost, ClientMessagesDataGrid, _clientMessages);
+        }
+
+        private void CancelMessageBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            /*var hrenb = _clientMessages.Find(x => x.Text == (ClientMessagesDataGrid.CurrentItem as ClientMessage).Text&&x.RecivedTimeWPF== (ClientMessagesDataGrid.CurrentItem as ClientMessage).RecivedTimeWPF);
+            _clientMessages.Remove(hrenb);*/
+            List<WorkTask> taskList = _unitOfCookie.WorkTaskRepository.GetAll().Convert();
+            if (taskList.Exists(x => x.Name == messsage.Text))
+            {
+                var pair = _deletableFilesDictionary.First(x => x.Key.Text == messsage.Text);
+                _clientMessages.Remove(pair.Key);
+                _deletableFilesDictionary.Remove(pair.Key);
+                File.Delete(pair.Value);
+            }
         }
     }
 }

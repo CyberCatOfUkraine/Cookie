@@ -115,7 +115,7 @@ namespace WPFUI.PartialViews.Accesses
 
         private List<Employee> EmployeesWithThisAccess(Access access)
         {
-            return (from employee in uof.EmployeeRepository.GetAll() where employee.Accesses.Exists(x => x.Name == access.Name) select employee.Convert()).ToList();
+            return (from employee in uof.EmployeeRepository.GetAll().Convert() where employee.Accesses.Exists(x => x.Name == access.Name) select employee).ToList();
         }
 
         private void AccessesViewControl_OnUnloaded(object sender, RoutedEventArgs e)

@@ -53,8 +53,8 @@ namespace MessageBroker.TelegramBroker
                             cancellationToken: cancellationToken,
                             replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
 
-                        await botClient.SendTextMessageAsync(chatId, BotStrings.CheckRoleAndTryChangeItIntro,
-                            cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);
+                        /*await botClient.SendTextMessageAsync(chatId, BotStrings.CheckRoleAndTryChangeItIntro,
+                            cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);*/
                     }
                     /*else if (message.Text.Equals("i"))
                     {
@@ -85,6 +85,73 @@ namespace MessageBroker.TelegramBroker
                             cancellationToken: cancellationToken, replyMarkup: markup);
                     }*/
 
+                    if (message!.Text?.ToLower() == "u1")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Введіть адресу\n(розділяючи область, район, населений пункт, вулицю, будинок та квартиру комами)",
+                            cancellationToken: cancellationToken);
+                    }
+                    if (message!.Text?.ToLower() == "u2")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "На вулиці за введеною адресою знаходиться співробітник що вже вирішує проблему",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                    }
+
+                    if (message!.Text?.ToLower() == "i1")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Вільно працівників 1 з 2",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                    }
+                    if (message!.Text?.ToLower() == "i2")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Вирішуються проблем електропостачання в кількості 1",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                    }
+
+                    if (message!.Text?.ToLower() == "e1")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Виникла наступна проблема:\n" +
+                            "Перегоріла лампочка в під'їзді\n" +
+                            "За адресою:Київська,Бориспільський,Бровари,Івана Мазепи,144",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: KeyboardMarkups.GetTaskRecieveMarkup);
+                    }
+                    if (message!.Text?.ToLower() == "e2")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Отримання зафіксовано\n",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: KeyboardMarkups.StartTaskRecieveMarkup);
+                    }
+                    if (message!.Text?.ToLower() == "e3")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Початок роботи зафіксовано\n",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: KeyboardMarkups.FinishedTaskRecieveMarkup);
+                    }
+                    if (message!.Text?.ToLower() == "e4")
+                    {
+                        //TODO:Check for acceptable id and give the message
+                        await botClient.SendTextMessageAsync(message.Chat,
+                            "Завершення роботи зафіксовано\n",
+                            cancellationToken: cancellationToken,
+                            replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
+                    }
                     else
                     {
                         #region Invalid input
@@ -106,7 +173,7 @@ namespace MessageBroker.TelegramBroker
             {
                 var chatId = update.CallbackQuery!.From.Id;
                 wrapper.TryAddUserToList(chatId);
-
+                /*
                 try
                 {
                     await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message!.MessageId,
@@ -117,7 +184,7 @@ namespace MessageBroker.TelegramBroker
                 {
                     Console.WriteLine("Не вдалося стерти повідомлення: " + e.Message);
 
-                }
+                }*/
 
                 if (update.CallbackQuery.Data == BotStrings.AvailableOperationsList)
                 {
@@ -147,6 +214,16 @@ namespace MessageBroker.TelegramBroker
                     await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Client,
                         cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
                 }
+
+
+                if (update.CallbackQuery.Data == BotStrings.Client)
+                {
+                    TryChangeRole(chatId,RoleEnum.Client);
+                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Client,
+                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                }
+
+
             }
 
         }

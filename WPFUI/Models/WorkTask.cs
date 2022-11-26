@@ -69,24 +69,22 @@ namespace WPFUI.Models
             }
         }
 
-        public string EmployeeWPF
-        {
-            get
-            {
-                if (AssignedEmployees==null||AssignedEmployees.Count==0)
-                    return "";
-                else
-                    return AssignedEmployees.First().Credentials;
+        public string EmployeeWPF =>
+            AssignedEmployees == null || AssignedEmployees.Count == 0
+                ? ""
+                : AssignedEmployees.First().Credentials;
 
-            }
-        }
-
-        public string AccessWPF => AssignedEmployeesAccesses.First().Name;
+        public string AccessWPF => AssignedEmployeesAccesses==null || AssignedEmployeesAccesses.Count == 0 ? "" : AssignedEmployeesAccesses.First().Name;
 
         public string AddressWPF
         {
             get
             {
+                if (Addresses == null|| Addresses.Count==0)
+                {
+                    return "";
+                }
+
                 var address = Addresses.First();
                return address.Apartment == null
                     ?
@@ -112,7 +110,7 @@ namespace WPFUI.Models
                 return CurrentState switch
                 {
                     TaskState.Created => "Створено",
-                    TaskState.Assigned => "Назначено",
+                    TaskState.Assigned => "Призначено",
                     TaskState.Recived => "Отримано для виконання",
                     TaskState.Started => "Розпочато",
                     TaskState.OnPause => "На паузі",
