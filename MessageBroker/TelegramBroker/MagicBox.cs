@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DatabaseBroker;
+using DatabaseBroker.Models;
 using MessageBroker.TelegramBroker.User;
 using MessageBroker.TelegramBroker.User.User;
 using Microsoft.VisualBasic;
@@ -10,23 +12,23 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace MessageBroker.TelegramBroker
 {
-    internal class UserOperationMikroWrapper
+    internal class MagicBox
     {
-
-        private static UserOperationMikroWrapper wrapper;
+        private UnitOfCookie _unitOfCookie;
+        private static MagicBox wrapper;
         private static bool _isInitialized = false;
         private List<OrdinaryUser> users = new();
+        private OrdinaryUser Engineer;
 
-        /// <summary>
-        /// Don't use this
-        /// </summary>
-        /// <param name="users">Collection for copying</param>
-        public UserOperationMikroWrapper(List<OrdinaryUser> users)
+        public MagicBox()
         {
-            this.users = users;
+            if (!_isInitialized)
+            {
+                throw new InvalidOperationException(typeof(MagicBox) + "must be initialized!");
+            }
         }
 
-        public static UserOperationMikroWrapper Instance
+        public static MagicBox Instance
         {
             get
             {
@@ -36,10 +38,11 @@ namespace MessageBroker.TelegramBroker
                 }
 
                 _isInitialized = true;
-                wrapper = new UserOperationMikroWrapper(new List<OrdinaryUser>());
+                wrapper = new MagicBox();
                 return wrapper;
             }
         }
+
         public RoleEnum GetRoleChatById(long chatId)
         {
             if (users.Exists(x => x.ChatId == chatId))
@@ -61,26 +64,9 @@ namespace MessageBroker.TelegramBroker
 
         private bool IsExistInDb(long chatId)
         {
-            return users.Exists(x => x.ChatId == chatId);//TODO: Додати перевірку щодо реальної бази даних
+            return users.Exists(x => x.ChatId == chatId); //TODO: Додати перевірку щодо реальної бази даних
         }
 
-        public void ChangeStatus(long chatId, RoleEnum role)
-        {
-            if (IsExistInDb(chatId))
-            {
-                var user = users.Find(x => x.ChatId == chatId);
-                user.Role = role;
-                user.KeyboardMarkup = ChangeMarkupByRole(role);
-
-                var index = users.IndexOf(user);
-                users.RemoveAt(index);
-                users.Insert(index, user);
-                return;
-            }
-
-            Console.WriteLine("Current user not exist! On ChangeStatus");
-
-        }
 
         private InlineKeyboardMarkup ChangeMarkupByRole(RoleEnum role)
         {
@@ -99,6 +85,7 @@ namespace MessageBroker.TelegramBroker
             {
                 return users.Find(x => x.ChatId == chatId)!.KeyboardMarkup;
             }
+
             Console.WriteLine("Current user not exist! On GetKeyboardMarkupByChatId");
             return null!;
         }
@@ -107,7 +94,7 @@ namespace MessageBroker.TelegramBroker
         {
             if (IsExistInDb(chatId))
             {
-               return  GetIntroByRole(users.Find(x => x.ChatId == chatId)!.Role);
+                return GetIntroByRole(users.Find(x => x.ChatId == chatId)!.Role);
             }
 
             return GetIntroByRole(RoleEnum.Client);
@@ -122,6 +109,50 @@ namespace MessageBroker.TelegramBroker
                 RoleEnum.Electrician => BotStrings.ElectricianIntro,
                 _ => BotStrings.ClientIntro
             };
+        }
+
+        public void SetUnitOfCookie(UnitOfCookie unitOfCookie)
+        {
+            _unitOfCookie = unitOfCookie;
+        }
+
+        public string GetStatOfFreeEmployees()
+        {
+            return (_unitOfCookie.EmployeeRepository.Count() - _unitOfCookie.WorkTaskRepository.GetAll()
+                .Count(x => x.CurrentState == TaskState.Started)).ToString();
+
+        }
+
+        public string GetStatOfPowerGridProblems()
+        {
+            return _unitOfCookie.WorkTaskRepository.GetAll().Count(x => x.CurrentState == TaskState.Started).ToString();
+
+        }
+
+        public void SetEngineerTelegramID(long telegramId)
+        {
+            Engineer = new OrdinaryUser(telegramId)
+            {
+                Role = RoleEnum.Engineer,
+                KeyboardMarkup = GetKeyboardMarkupByRole(RoleEnum.Engineer)
+            };
+            users.Add(Engineer);
+        }
+
+        private InlineKeyboardMarkup GetKeyboardMarkupByRole(RoleEnum role)
+        {
+            return role switch
+            {
+                RoleEnum.Engineer => KeyboardMarkups.EngineerKeyboardMarkup,
+                RoleEnum.Client => KeyboardMarkups.ClientKeyboardMarkup,
+                RoleEnum.Electrician => KeyboardMarkups.ElectricianKeyboardMarkup,
+                _ => KeyboardMarkups.ClientKeyboardMarkup
+            };
+        }
+
+        public string TryGetCredentialsById(long chatId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

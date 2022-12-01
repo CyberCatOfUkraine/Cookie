@@ -9,5 +9,6 @@ namespace Cookie
     public static class GeneralStrings
     {
         public static readonly string ClientMessagesDirectoryPath=Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"Cookie"),"Messages");
+        public static readonly string SettingsDirectoryPath=Path.Combine(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),"Cookie"),"Settings");
     }
 }

@@ -13,12 +13,12 @@ namespace WPFUI.Models
         {
             Name = name;
         }
-        public WorkTask(DateTime started, DateTime finished, List<Pause> pausesList, List<Employee> assignedEmployees, TaskState currentState, List<Address> addresses, string name, List<Access> assignedEmployeesAccesses)
+        public WorkTask(DateTime started, DateTime finished, List<Pause> pausesList, Employee assignedEmployee, TaskState currentState, List<Address> addresses, string name, List<Access> assignedEmployeesAccesses)
         {
             Started = started;
             Finished = finished;
             PausesList = pausesList;
-            AssignedEmployees = assignedEmployees;
+            AssignedEmployee = assignedEmployee;
             CurrentState = currentState;
             Addresses = addresses;
             Name = name;
@@ -30,7 +30,7 @@ namespace WPFUI.Models
         public DateTime Started { get; set; }
         public DateTime Finished { get; set; }
         public List<Pause> PausesList { get; set; }
-        public List<Employee> AssignedEmployees { get; set; }
+        public Employee AssignedEmployee { get; set; }
         public List<Access> AssignedEmployeesAccesses { get; set; }
         public List<Address> Addresses { get; set; }
         public TaskState CurrentState { get; set; }
@@ -69,10 +69,7 @@ namespace WPFUI.Models
             }
         }
 
-        public string EmployeeWPF =>
-            AssignedEmployees == null || AssignedEmployees.Count == 0
-                ? ""
-                : AssignedEmployees.First().Credentials;
+        public string EmployeeWPF => AssignedEmployee == null ? "" : AssignedEmployee.Credentials;
 
         public string AccessWPF => AssignedEmployeesAccesses==null || AssignedEmployeesAccesses.Count == 0 ? "" : AssignedEmployeesAccesses.First().Name;
 

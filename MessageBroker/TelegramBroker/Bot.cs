@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
+using MessageBroker.TelegramBroker.Exceptions;
 using MessageBroker.TelegramBroker.User;
 using MessageBroker.TelegramBroker.User.User;
 using Telegram.Bot.Types;
@@ -21,27 +22,23 @@ namespace MessageBroker.TelegramBroker
         public Bot() //TODO: EngineerUser, OrdinaryUser, Electrician
         {
             _botClient = new TelegramBotClient(TokenLoader.Token);
-
         }
+
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
-            var wrapper = UserOperationMikroWrapper.Instance;
-
-
-            //TODO: Прийшли повідомлення? Узнать від кого, далі опрацювати і видати результат нагора
-            //TODO: Принцип який, якщо користувач пише повідомлення то ми такі нажаль не можемо опрацювати ваш запит і дефолтне повідомлення з кучою кнопок типу
-            //перейти на сайт, (так блет це фіча)дізнатися про найближче заплановане відключення, дізнатися про проблеми в вашому регіоні, змінити регіон
+            var magicBox = MagicBox.Instance;
 
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
-                wrapper.TryAddUserToList(update.Message!.From!.Id);
+                magicBox.TryAddUserToList(update.Message!.From!.Id);
 
+
+                var message = update.Message;
+
+                var chatId = message.From.Id;
                 try
                 {
-                    var message = update.Message;
-
-                    var chatId = message.From.Id;
                     if (message!.Text?.ToLower() == "/start")
                     {
                         //TODO:Check for acceptable id and give the message
@@ -49,114 +46,14 @@ namespace MessageBroker.TelegramBroker
                             "Привіт!\n(На даний момент вся взаємодія з ботом відбувається за допомогою кнопок)",
                             cancellationToken: cancellationToken);
                         await botClient.SendTextMessageAsync(message.Chat,
-                            UserOperationMikroWrapper.Instance.GetDefaultIntroByChatId(chatId),
+                            MagicBox.Instance.GetDefaultIntroByChatId(chatId),
                             cancellationToken: cancellationToken,
-                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-
-                        /*await botClient.SendTextMessageAsync(chatId, BotStrings.CheckRoleAndTryChangeItIntro,
-                            cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);*/
-                    }
-                    /*else if (message.Text.Equals("i"))
-                    {
-                        UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Engineer);
-
-                        await botClient.SendTextMessageAsync(message.Chat, "You engineer now",
-                            cancellationToken: cancellationToken);
-                    }
-                    else if (message.Text.Equals("e"))
-                    {
-                        UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Electrician);
-
-                        await botClient.SendTextMessageAsync(message.Chat, "You electrician now",
-                            cancellationToken: cancellationToken);
-                    }
-                    else if (message.Text.Equals("c"))
-                    {
-                        UserOperationMikroWrapper.Instance.ChangeStatus(chatId, RoleEnum.Client);
-                        await botClient.SendTextMessageAsync(message.Chat, "You client now",
-                            cancellationToken: cancellationToken);
-                    }
-                    else if (message.Text.Equals("Check"))
-                    {
-                        var role = UserOperationMikroWrapper.Instance.GetRoleChatById(chatId);
-                        var markup = UserOperationMikroWrapper.Instance.GetKeyboardMarkupByChatId(chatId);
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Status:" + role,
-                            cancellationToken: cancellationToken, replyMarkup: markup);
-                    }*/
-
-                    if (message!.Text?.ToLower() == "u1")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Введіть адресу\n(розділяючи область, район, населений пункт, вулицю, будинок та квартиру комами)",
-                            cancellationToken: cancellationToken);
-                    }
-                    if (message!.Text?.ToLower() == "u2")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "На вулиці за введеною адресою знаходиться співробітник що вже вирішує проблему",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-                    }
-
-                    if (message!.Text?.ToLower() == "i1")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Вільно працівників 1 з 2",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-                    }
-                    if (message!.Text?.ToLower() == "i2")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Вирішуються проблем електропостачання в кількості 1",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-                    }
-
-                    if (message!.Text?.ToLower() == "e1")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Виникла наступна проблема:\n" +
-                            "Перегоріла лампочка в під'їзді\n" +
-                            "За адресою:Київська,Бориспільський,Бровари,Івана Мазепи,144",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: KeyboardMarkups.GetTaskRecieveMarkup);
-                    }
-                    if (message!.Text?.ToLower() == "e2")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Отримання зафіксовано\n",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: KeyboardMarkups.StartTaskRecieveMarkup);
-                    }
-                    if (message!.Text?.ToLower() == "e3")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Початок роботи зафіксовано\n",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: KeyboardMarkups.FinishedTaskRecieveMarkup);
-                    }
-                    if (message!.Text?.ToLower() == "e4")
-                    {
-                        //TODO:Check for acceptable id and give the message
-                        await botClient.SendTextMessageAsync(message.Chat,
-                            "Завершення роботи зафіксовано\n",
-                            cancellationToken: cancellationToken,
-                            replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
+                            replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                     }
                     else
                     {
                         #region Invalid input
 
-                        var keyboardMarkups = wrapper.GetKeyboardMarkupByChatId(chatId);
                         await botClient.SendTextMessageAsync(chatId, BotStrings.InvalidInput,
                             cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);
 
@@ -165,85 +62,50 @@ namespace MessageBroker.TelegramBroker
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    OnExceptionAction.Invoke(e,
+                        magicBox.GetRoleChatById(chatId)==RoleEnum.Engineer,
+                        magicBox.GetRoleChatById(chatId)==RoleEnum.Electrician,magicBox.TryGetCredentialsById(chatId));
                 }
             }
 
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
             {
                 var chatId = update.CallbackQuery!.From.Id;
-                wrapper.TryAddUserToList(chatId);
-                /*
-                try
-                {
-                    await botClient.DeleteMessageAsync(chatId, update.CallbackQuery.Message!.MessageId,
-                        cancellationToken);
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Не вдалося стерти повідомлення: " + e.Message);
-
-                }*/
-
+                magicBox.TryAddUserToList(chatId);
                 if (update.CallbackQuery.Data == BotStrings.AvailableOperationsList)
                 {
-                    await botClient.SendTextMessageAsync(chatId, BotStrings.AvailableOperations,
-                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                    await botClient.SendTextMessageAsync(chatId, magicBox.GetDefaultIntroByChatId(chatId),
+                        cancellationToken: cancellationToken,
+                        replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                 }
-                if (update.CallbackQuery.Data == BotStrings.UpdateRoleRequest)
+                if (update.CallbackQuery.Data == BotStrings.StatOfFreeEmployees)
                 {
-                    await botClient.SendTextMessageAsync(chatId, BotStrings.ChooseRole,
-                        cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.ChangeRoleKeyboardMarkup);
+                    await botClient.SendTextMessageAsync(chatId,"Співробітників вільно:"+
+                        MagicBox.Instance.GetStatOfFreeEmployees(),
+                        cancellationToken: cancellationToken, replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                 }
-                if (update.CallbackQuery.Data == BotStrings.Engineer)
+                if (update.CallbackQuery.Data == BotStrings.StatOfPowerGridProblems)
                 {
-                    TryChangeRole(chatId,RoleEnum.Engineer);
-                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Engineer,
-                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
+                    await botClient.SendTextMessageAsync(chatId, "Кількість проблем що вирішується: " +
+                                                                 magicBox.GetStatOfPowerGridProblems(),
+                        cancellationToken: cancellationToken,
+                        replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                 }
-                if (update.CallbackQuery.Data == BotStrings.Electrician)
-                {
-                    TryChangeRole(chatId,RoleEnum.Electrician);
-                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Electrician,
-                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-                }
-                if (update.CallbackQuery.Data == BotStrings.Client)
-                {
-                    TryChangeRole(chatId,RoleEnum.Client);
-                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Client,
-                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-                }
-
-
-                if (update.CallbackQuery.Data == BotStrings.Client)
-                {
-                    TryChangeRole(chatId,RoleEnum.Client);
-                    await botClient.SendTextMessageAsync(chatId, BotStrings.RoleChangedOn+BotStrings.Client,
-                        cancellationToken: cancellationToken, replyMarkup: wrapper.GetKeyboardMarkupByChatId(chatId));
-                }
-
+                
 
             }
-
-        }
-
-        private void TryChangeRole(long chatId, RoleEnum roleEnum)
-        {
-            UserOperationMikroWrapper.Instance.ChangeStatus(chatId, roleEnum);
         }
 
         public async Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception,
             CancellationToken cancellationToken)
         {
-            // Некоторые действия
-            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(exception));
+            OnExceptionAction.Invoke(exception,false,false,string.Empty);
         }
 
         public void Start()
         {
             Console.WriteLine("Started already " + _botClient.GetMeAsync().Result.FirstName);
-
+            
             var cts = new CancellationTokenSource();
             var cancellationToken = cts.Token;
             var receiverOptions = new ReceiverOptions
@@ -260,7 +122,18 @@ namespace MessageBroker.TelegramBroker
 
         public async void SendMessageIntoClient(long telegramId, string message)
         {
-            await _botClient.SendTextMessageAsync(telegramId, message);
+            try
+            {
+                await _botClient.SendTextMessageAsync(telegramId, message);
+            }
+            catch (Exception e)
+            {
+                OnExceptionAction.Invoke(e,
+                    MagicBox.Instance.GetRoleChatById(telegramId) == RoleEnum.Engineer,
+                    MagicBox.Instance.GetRoleChatById(telegramId) == RoleEnum.Electrician, 
+                    MagicBox.Instance.TryGetCredentialsById(telegramId));
+            }
         }
+        public Action<Exception,bool,bool,string> OnExceptionAction;
     }
 }

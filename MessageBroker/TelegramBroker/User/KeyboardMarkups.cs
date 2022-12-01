@@ -18,7 +18,7 @@ namespace MessageBroker.TelegramBroker.User
                 {
                     new[]
                     {
-                        InlineKeyboardButton.WithUrl(BotStrings.SiteText, BotStrings.SiteURL),
+                        InlineKeyboardButton.WithUrl(BotStrings.SiteText, BotStrings.SiteUrl),
                     },
                     new[]
                     {
@@ -61,27 +61,6 @@ namespace MessageBroker.TelegramBroker.User
                };
             }
         }
-        public static InlineKeyboardMarkup ChangeRoleKeyboardMarkup
-        {
-           get
-           {
-               return new[]
-               {
-                   new[]
-                   {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.Client)
-                   },
-                   new[]
-                   {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.Electrician)
-                   },
-                   new[]
-                   {
-                       InlineKeyboardButton.WithCallbackData(BotStrings.Engineer)
-                   }
-               };
-            }
-        }
 
         public static InlineKeyboardMarkup InvalidInput
         {
@@ -92,10 +71,6 @@ namespace MessageBroker.TelegramBroker.User
                     new[]
                     {
                         InlineKeyboardButton.WithCallbackData(BotStrings.AvailableOperationsList)
-                    },
-                    new[]
-                    {
-                        InlineKeyboardButton.WithCallbackData(BotStrings.UpdateRoleRequest)
                     }
                 };
             }

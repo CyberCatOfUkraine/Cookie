@@ -58,7 +58,14 @@ namespace WPFUI.LoadingWindow
         {
             this.Hide();
             _mainWindow = new MainWindow(_unitOfCookie);
-            _mainWindow.Show();
+            try
+            {
+                _mainWindow.Show();
+            }
+            catch (InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message+"\n\n\n"+e.StackTrace);
+            }
             this.Close();
         }
 
