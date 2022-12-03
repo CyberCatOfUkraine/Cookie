@@ -8,6 +8,6 @@ namespace WPFUI.Models
 {
     public enum TaskState
     {
-        Created,Assigned,Recived,Started,OnPause,Resume,Finished,Canceled
+        Created, Assigned, Recived, Started, OnPause, Resume, Finished, Canceled,Unknown
     }
 }

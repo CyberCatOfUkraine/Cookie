@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatabaseBroker.Models
+namespace MessageBroker.TelegramBroker.User.Tasks
 {
     public enum TaskState
     {
-        Created, Assigned, Recived, Started, OnPause, Resume, Finished, Canceled, Unknown
+        Created, Assigned, Recived, Started, OnPause, Resume, Finished, Canceled,Unknown
     }
 }

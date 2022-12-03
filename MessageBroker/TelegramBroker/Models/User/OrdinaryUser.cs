@@ -8,7 +8,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace MessageBroker.TelegramBroker.User
 {
-    internal class OrdinaryUser
+    public class OrdinaryUser
     {
         public OrdinaryUser(long chatId)
         {

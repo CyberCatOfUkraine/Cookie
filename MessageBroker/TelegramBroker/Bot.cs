@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
-using MessageBroker.TelegramBroker.Exceptions;
 using MessageBroker.TelegramBroker.User;
 using MessageBroker.TelegramBroker.User.User;
 using Telegram.Bot.Types;
@@ -101,7 +100,15 @@ namespace MessageBroker.TelegramBroker
                         cancellationToken: cancellationToken,
                         replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                 }*/
-                
+                /*
+                 *
+                 *
+                 *Опрацювати кожен пункт роботи електрика, взаємодія через MagickBox
+                 *
+                 *
+                 *
+                 *
+                 */
 
             }
         }
@@ -136,6 +143,27 @@ namespace MessageBroker.TelegramBroker
             try
             {
                 await _botClient.SendTextMessageAsync(telegramId, message);
+            }
+            catch (Exception e)
+            {
+                OnExceptionAction.Invoke(e,
+                    MagicBox.Instance.GetRoleChatById(telegramId) == RoleEnum.Engineer,
+                    MagicBox.Instance.GetRoleChatById(telegramId) == RoleEnum.Electrician, 
+                    MagicBox.Instance.TryGetCredentialsById(telegramId));
+            }
+        }
+        public async void SendTaskToElectrician(long telegramId, string message)
+        {
+            try
+            {
+                if (MagicBox.Instance.GetCurrentTaskId(telegramId)!=-1)
+                {
+                    await _botClient.SendTextMessageAsync(telegramId, message,replyMarkup:KeyboardMarkups.GetTaskRecievedMarkup);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Can't send message to user");
+                }
             }
             catch (Exception e)
             {

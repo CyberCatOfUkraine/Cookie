@@ -1,4 +1,7 @@
 ﻿using DatabaseBroker;
+using MessageBroker.TelegramBroker.Models;
+using MessageBroker.TelegramBroker.User;
+using MessageBroker.TelegramBroker.User.Tasks;
 
 namespace MessageBroker.TelegramBroker
 {
@@ -15,20 +18,12 @@ namespace MessageBroker.TelegramBroker
         public void LoadTelegramBot()
         {
             //TODO:Insert security code
-            if (!_isBotStarted)
-            {
-                bot.Start();
-            }
-            _isBotStarted = true;
+            TryStartBot();
         }
         private bool _isBotStarted;
         public void SendMessage(long telegramId, string message)
         {
-            if (!_isBotStarted)
-            {
-                bot.Start();
-            }
-            _isBotStarted = true;
+            TryStartBot();
             bot.SendMessageIntoClient(telegramId, message);
         }
 
@@ -46,6 +41,36 @@ namespace MessageBroker.TelegramBroker
             set => bot.OnExceptionAction = value;
         }
 
+        public void SendTask(int taskId, long chatId, string address, 
+            Action onTaskRecived,Action onTaskStarted,Action onTaskFinished,Action onTaskCanceled)
+        {
+            TryStartBot();
+            var actionHolder = new ActionHolder(onTaskRecived,onTaskStarted,onTaskFinished,onTaskCanceled);
+            var task = new UserTask(taskId,MagicBox.Instance.GetUserByChatId(chatId),address,TaskState.Assigned,actionHolder);
+
+            MagicBox.Instance.SetBotInstance(bot);
+            MagicBox.Instance.ProcessTask(task);
+            onTaskRecived.Invoke();
+        }
+
+        private void TryStartBot()
+        {
+            if (!_isBotStarted)
+            {
+                bot.Start();
+            }
+            _isBotStarted = true;
+        }
+
+        /// <summary>
+        /// return taskId -1 if task not assigned
+        /// </summary>
+        /// <param name="chatId">Telegram chat id</param>
+        /// <returns></returns>
+        public (TaskState taskState, int TaskId) OperationTuple(int chatId)
+        {
+            return (MagicBox.Instance.GetCurrentTaskStateById(chatId), MagicBox.Instance.GetCurrentTaskId(chatId));
+        }
         public void UpdateEmployees()
         {
             MagicBox.UpdateLocals();

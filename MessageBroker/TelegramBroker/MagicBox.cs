@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DatabaseBroker;
-using DatabaseBroker.Models;
 using MessageBroker.TelegramBroker.User;
+using MessageBroker.TelegramBroker.User.Tasks;
 using MessageBroker.TelegramBroker.User.User;
 using Microsoft.VisualBasic;
 using Telegram.Bot.Types.ReplyMarkups;
+using TaskState = DatabaseBroker.Models.TaskState;
 
 namespace MessageBroker.TelegramBroker
 {
@@ -19,7 +20,7 @@ namespace MessageBroker.TelegramBroker
         private static bool _isInitialized = false;
         private List<OrdinaryUser> users = new();
         private static OrdinaryUser Engineer;
-
+        private List<UserTask> _tasks = new();
         public MagicBox()
         {
             if (!_isInitialized)
@@ -179,6 +180,76 @@ namespace MessageBroker.TelegramBroker
         {
             var noOperation = "На цей момент операцій не знайдено, перевірте через деякий час.";
             return noOperation;
+        }
+
+        /// <summary>
+        /// If user not exist return unknown state
+        /// </summary>
+        /// <param name="chatId">Telegram chat id</param>
+        /// <returns>task state by id</returns>
+        public User.Tasks.TaskState GetCurrentTaskStateById(long chatId)
+        {
+            if (_tasks.Count == 0)
+            {
+                return User.Tasks.TaskState.Unknown;
+            }
+            if (_tasks.Exists(x => x.User.ChatId == chatId))
+            {
+                return _tasks.Find(x => x.User.ChatId == chatId).TaskState;
+            }
+
+            return User.Tasks.TaskState.Unknown;
+        }
+
+        /// <summary>
+        /// return -1 if task not assigned
+        /// </summary>
+        /// <param name="chatId">Telegram chat id</param>
+        /// <returns>Id of current task</returns>
+        public int GetCurrentTaskId(long chatId)
+        {
+            if (_tasks.Count==0)
+            {
+                return -1;
+            }
+            if (_tasks.Exists(x=>x.User.ChatId==chatId))
+            {
+                return _tasks.Find(x => x.User.ChatId == chatId).Id;
+            }
+
+            return -1;
+        }
+
+        public OrdinaryUser GetUserByChatId(long chatId)
+        {
+            if (users.Exists(x=>x.ChatId==chatId))
+            {
+                return users.Find(x => x.ChatId == chatId);
+            }
+
+            return null;
+        }
+
+        private Bot bot;
+        public void SetBotInstance(Bot bot)
+        {
+            this.bot = bot;
+        }
+        public void ProcessTask(UserTask task)
+        {
+            if (task.TaskState == User.Tasks.TaskState.Assigned)
+            {
+                //We need deliver it, after onRecive action
+                //after we need trace all user interaction and make corresponding(відповідні) actions
+                _tasks.Add(task);
+                bot.SendTaskToElectrician(task.Id, "Виникла наступна проблема:\n" +
+                                                   task.Name +
+                                                   "За адресою: "+task.Address);
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot process not assigned task\nTask ID:"+task.Id+"\nTask state: "+task.TaskState);
+            }
         }
     }
 }
