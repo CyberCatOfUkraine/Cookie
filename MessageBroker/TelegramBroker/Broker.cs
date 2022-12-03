@@ -40,10 +40,15 @@ namespace MessageBroker.TelegramBroker
         /// <summary>
         /// Exception,engineer (true) or electrician (false), credentials
         /// </summary>
-        public Action<Exception,bool,string> OnExceptionAction
+        public Action<Exception,bool,bool,string> OnExceptionAction
         {
             get => bot.OnExceptionAction;
             set => bot.OnExceptionAction = value;
+        }
+
+        public void UpdateEmployees()
+        {
+            MagicBox.UpdateLocals();
         }
     }
 

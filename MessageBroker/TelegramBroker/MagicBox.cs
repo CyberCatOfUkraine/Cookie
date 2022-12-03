@@ -14,11 +14,11 @@ namespace MessageBroker.TelegramBroker
 {
     internal class MagicBox
     {
-        private UnitOfCookie _unitOfCookie;
+        private static UnitOfCookie _unitOfCookie;
         private static MagicBox wrapper;
         private static bool _isInitialized = false;
         private List<OrdinaryUser> users = new();
-        private OrdinaryUser Engineer;
+        private static OrdinaryUser Engineer;
 
         public MagicBox()
         {
@@ -28,6 +28,10 @@ namespace MessageBroker.TelegramBroker
             }
         }
 
+        public void SetUsers(List<OrdinaryUser> users)
+        {
+            this.users = users;
+        }
         public static MagicBox Instance
         {
             get
@@ -36,11 +40,23 @@ namespace MessageBroker.TelegramBroker
                 {
                     return wrapper;
                 }
-
+                
                 _isInitialized = true;
                 wrapper = new MagicBox();
                 return wrapper;
             }
+        }
+
+        public static void UpdateLocals()
+        {
+            var list =
+                (from user in _unitOfCookie.EmployeeRepository.GetAll() select new OrdinaryUser(user.TelegramID){Role = RoleEnum.Electrician,KeyboardMarkup = KeyboardMarkups.ElectricianKeyboardMarkup}).ToList();
+            if (Engineer!=null)
+            {
+                list.Add(Engineer);
+            }
+            wrapper.SetUsers(list);
+            
         }
 
         public RoleEnum GetRoleChatById(long chatId)
@@ -53,18 +69,17 @@ namespace MessageBroker.TelegramBroker
             Console.WriteLine("Current user not exist! On GetRoleChatById");
             return RoleEnum.Client;
         }
-
-        public void TryAddUserToList(long chatId)
-        {
-            if (!IsExistInDb(chatId))
-            {
-                users.Add(new OrdinaryUser(chatId));
-            }
-        }
-
+        
         private bool IsExistInDb(long chatId)
         {
-            return users.Exists(x => x.ChatId == chatId); //TODO: Додати перевірку щодо реальної бази даних
+            if (Engineer.ChatId==chatId)
+            {
+                return true;
+            }
+
+            return
+                users.Exists(x =>
+                    x.ChatId == chatId); //_unitOfCookie.EmployeeRepository.GetAll().Exists(x => x.TelegramID== chatId);
         }
 
 
@@ -81,13 +96,7 @@ namespace MessageBroker.TelegramBroker
 
         public InlineKeyboardMarkup GetKeyboardMarkupByChatId(long chatId)
         {
-            if (IsExistInDb(chatId))
-            {
-                return users.Find(x => x.ChatId == chatId)!.KeyboardMarkup;
-            }
-
-            Console.WriteLine("Current user not exist! On GetKeyboardMarkupByChatId");
-            return null!;
+            return IsExistInDb(chatId) ? users.Find(x => x.ChatId == chatId)!.KeyboardMarkup : MagicBox.Instance.GetKeyboardMarkupByRole(RoleEnum.Client);
         }
 
         public string GetDefaultIntroByChatId(long chatId)
@@ -114,6 +123,7 @@ namespace MessageBroker.TelegramBroker
         public void SetUnitOfCookie(UnitOfCookie unitOfCookie)
         {
             _unitOfCookie = unitOfCookie;
+            UpdateLocals();
         }
 
         public string GetStatOfFreeEmployees()
@@ -152,7 +162,23 @@ namespace MessageBroker.TelegramBroker
 
         public string TryGetCredentialsById(long chatId)
         {
-            throw new NotImplementedException();
+            if (_unitOfCookie.EmployeeRepository==null||_unitOfCookie.EmployeeRepository.Get(x => x.TelegramID == chatId)==null)
+            {
+                return string.Empty;
+            }
+            return _unitOfCookie.EmployeeRepository.Get(x => x.TelegramID == chatId).Credentials;
+        }
+        
+
+        /// <summary>
+        /// Повертає доступну для виконання операцію або повідомлення про відсутність завдань
+        /// </summary>
+        /// <param name="chatId">Telegram id</param>
+        /// <returns></returns>
+        public string GetOperationById(long chatId)
+        {
+            var noOperation = "На цей момент операцій не знайдено, перевірте через деякий час.";
+            return noOperation;
         }
     }
 }

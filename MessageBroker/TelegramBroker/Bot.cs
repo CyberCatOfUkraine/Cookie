@@ -27,13 +27,11 @@ namespace MessageBroker.TelegramBroker
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
+            MagicBox.UpdateLocals();
             var magicBox = MagicBox.Instance;
 
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.Message)
             {
-                magicBox.TryAddUserToList(update.Message!.From!.Id);
-
-
                 var message = update.Message;
 
                 var chatId = message.From.Id;
@@ -71,7 +69,6 @@ namespace MessageBroker.TelegramBroker
             if (update.Type == Telegram.Bot.Types.Enums.UpdateType.CallbackQuery)
             {
                 var chatId = update.CallbackQuery!.From.Id;
-                magicBox.TryAddUserToList(chatId);
                 if (update.CallbackQuery.Data == BotStrings.AvailableOperationsList)
                 {
                     await botClient.SendTextMessageAsync(chatId, magicBox.GetDefaultIntroByChatId(chatId),
@@ -91,6 +88,19 @@ namespace MessageBroker.TelegramBroker
                         cancellationToken: cancellationToken,
                         replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                 }
+                /*if (update.CallbackQuery.Data == BotStrings.StatOfPowerGridProblems)
+                {
+                    await botClient.SendTextMessageAsync(chatId, "Кількість проблем що вирішується: " +
+                                                                 magicBox.GetStatOfPowerGridProblems(),
+                        cancellationToken: cancellationToken,
+                        replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
+                }*/
+                /*if (update.CallbackQuery.Data == BotStrings.AvailableOperationsList)
+                {
+                    await botClient.SendTextMessageAsync(chatId, magicBox.GetOperationById(chatId),
+                        cancellationToken: cancellationToken,
+                        replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
+                }*/
                 
 
             }
@@ -118,6 +128,7 @@ namespace MessageBroker.TelegramBroker
                 receiverOptions,
                 cancellationToken
             );
+            MagicBox.UpdateLocals();
         }
 
         public async void SendMessageIntoClient(long telegramId, string message)

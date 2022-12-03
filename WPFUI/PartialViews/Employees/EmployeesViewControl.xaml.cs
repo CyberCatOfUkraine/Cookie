@@ -28,10 +28,13 @@ namespace WPFUI.PartialViews.Employees
     {
         private List<Employee> _employees;
         private UnitOfCookie _unitOfCookie;
-        public EmployeesViewControl(UnitOfCookie unitOfCookie)
+        private readonly Action _updateEmployees;
+
+        public EmployeesViewControl(UnitOfCookie unitOfCookie, Action updateEmployees)
         {
             InitializeComponent();
             _unitOfCookie = unitOfCookie;
+            _updateEmployees = updateEmployees;
             _employees = _unitOfCookie.EmployeeRepository.Count() > 0 ? _unitOfCookie.EmployeeRepository.GetAll().Convert() : new List<Employee>();
             EmployeesDataGrid.ItemsSource = _employees;
             dialog = new DialogGod<Employee>(new EmployeeComparator());
@@ -44,12 +47,14 @@ namespace WPFUI.PartialViews.Employees
             addControl.RemoveThisControl += RemoveAddControl;
 
             dialog.Create(addControl);
+            _updateEmployees.Invoke();
         }
 
         private void RemoveAddControl()
         {
             _employees=_unitOfCookie.EmployeeRepository.GetAll().Convert();
             dialog.Kill(EmployeeDialogHost,EmployeesDataGrid,_employees);
+            _updateEmployees.Invoke();
         }
 
         private void DeleteEmployeeBtn_OnClick(object sender, RoutedEventArgs e)
@@ -76,6 +81,7 @@ namespace WPFUI.PartialViews.Employees
 
             _unitOfCookie.EmployeeRepository.SaveChanges();
             _unitOfCookie.AccessRepository.SaveChanges();
+            _updateEmployees.Invoke();
         }
 
         private void ChangeEmployeeAccessesBtn_OnClick(object sender, RoutedEventArgs e)
@@ -90,6 +96,7 @@ namespace WPFUI.PartialViews.Employees
         {
             _employees = _unitOfCookie.EmployeeRepository.GetAll().Convert();
             dialog.Kill(EmployeeDialogHost, EmployeesDataGrid, _employees);
+            _updateEmployees.Invoke();
         }
     }
 }

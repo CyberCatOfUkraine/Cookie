@@ -13,6 +13,8 @@ namespace MessageBroker.TelegramBroker
     {
         #region For KeyboardMarkups
 
+        public static readonly string GetMyId = "Дізнатись персональний Id";
+
         #region Client KeyboardMarkups
         public static readonly string SiteText = "Сайт програми";
         public static readonly string SiteUrl = "https://github.com/CyberCatOfUkraine/Cookie";
@@ -29,6 +31,24 @@ namespace MessageBroker.TelegramBroker
         /// Доступні завдання
         /// </summary>
         public static readonly string NewTaskAvailability = "Доступні завдання";
+        
+        /// <summary>
+        /// Завдання отримано
+        /// </summary>
+        public static readonly string TaskRecieved = "Повідомлення отримано";
+        /// <summary>
+        /// Завдання розпочато
+        /// </summary>
+        public static readonly string TaskStarted = "Роботу почато";
+        /// <summary>
+        /// Завдання завершено
+        /// </summary>
+        public static readonly string TaskFinished = "Роботу завершено";
+        /// <summary>
+        /// Завдання скасовано
+        /// </summary>
+        public static readonly string TaskCanceled = "Роботу скасовано";
+
         #endregion
 
         #region Invalid input

@@ -75,7 +75,7 @@ namespace MessageBroker.TelegramBroker.User
                 };
             }
         }
-        public static InlineKeyboardMarkup GetTaskRecieveMarkup
+        public static InlineKeyboardMarkup GetTaskRecievedMarkup
         {
             get
             {
@@ -83,12 +83,12 @@ namespace MessageBroker.TelegramBroker.User
                 {
                     new[]
                     {
-                        InlineKeyboardButton.WithCallbackData("Повідомлення отримано")
+                        InlineKeyboardButton.WithCallbackData(BotStrings.TaskRecieved)
                     }
                 };
             }
         }
-        public static InlineKeyboardMarkup StartTaskRecieveMarkup
+        public static InlineKeyboardMarkup StartTaskMarkup
         {
             get
             {
@@ -96,12 +96,12 @@ namespace MessageBroker.TelegramBroker.User
                 {
                     new[]
                     {
-                        InlineKeyboardButton.WithCallbackData("Роботу почато")
+                        InlineKeyboardButton.WithCallbackData(BotStrings.TaskStarted)
                     }
                 };
             }
         }
-        public static InlineKeyboardMarkup FinishedTaskRecieveMarkup
+        public static InlineKeyboardMarkup FinishedTaskMarkup
         {
             get
             {
@@ -109,11 +109,11 @@ namespace MessageBroker.TelegramBroker.User
                 {
                     new[]
                     {
-                        InlineKeyboardButton.WithCallbackData("Роботу завершено")
+                        InlineKeyboardButton.WithCallbackData(BotStrings.TaskFinished)
                     },
                     new[]
                     {
-                        InlineKeyboardButton.WithCallbackData("Роботу скасовано")
+                        InlineKeyboardButton.WithCallbackData(BotStrings.TaskCanceled)
                     }
                 };
             }

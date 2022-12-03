@@ -90,7 +90,7 @@ namespace WPFUI
         }
         private void EmployeesBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            AddViewControlToContainer(new EmployeesViewControl(_unitOfCookie),"Співробітники");
+            AddViewControlToContainer(new EmployeesViewControl(_unitOfCookie,broker.UpdateEmployees),"Співробітники");
         }
         private void StatisticBtn_OnClick(object sender, RoutedEventArgs e)
         {
