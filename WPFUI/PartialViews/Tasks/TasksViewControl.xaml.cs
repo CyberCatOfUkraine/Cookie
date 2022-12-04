@@ -167,6 +167,14 @@ namespace WPFUI.PartialViews
                         return;
                     }
 
+                    try
+                    {
+                        AssignedUserIdList.Remove(task.AssignedEmployees.First().Id);
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine(exception);
+                    }
                     var addressString = new StringBuilder();
                     addressString.Append(task.Addresses.First().Region + ", ");
                     addressString.Append(task.Addresses.First().District + ", ");
