@@ -15,7 +15,7 @@ namespace DatabaseBroker.Models
         public DateTime Started { get; set; }
         public DateTime Finished { get; set; }
         public List<Pause> PausesList { get; set; }
-        public List<Employee> AssignedEmployees { get; set; }
+        public List<TaskEmployee> AssignedEmployees { get; set; }
         public List<Access> AssignedEmployeesAccesses { get; set; }
         public List<Address> Addresses { get; set; }
         public TaskState CurrentState { get; set; }

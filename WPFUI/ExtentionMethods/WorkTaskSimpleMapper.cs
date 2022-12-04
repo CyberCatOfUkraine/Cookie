@@ -28,7 +28,7 @@ namespace WPFUI.ExtentionMethods
             return new DatabaseBroker.Models.WorkTask() {Started = task.Started,
                Finished = task.Finished,
                PausesList = task.PausesList.Convert(),
-               AssignedEmployees = task.AssignedEmployees.Convert(), 
+               AssignedEmployees = task.AssignedEmployees.ConvertTask(), 
                CurrentState = (DatabaseBroker.Models.TaskState)(int)task.CurrentState, 
                Addresses = task.Addresses.ConvertToDatabaseAddress(), 
                Name = task.Name, 

@@ -19,6 +19,7 @@ using WPFUI.ExtentionMethods;
 using WPFUI.Models;
 using Address = WPFUI.Models.Address;
 using Employee = WPFUI.Models.Employee;
+using TaskEmployee = WPFUI.Models.TaskEmployee;
 using TaskState = WPFUI.Models.TaskState;
 using WorkTask = WPFUI.Models.WorkTask;
 
@@ -121,7 +122,8 @@ namespace WPFUI.PartialViews
 
                     var taskForUpdate = _tasks.Find(x => x.Id == task.Id);
                     taskForUpdate.CurrentState = TaskState.Assigned;
-                    taskForUpdate.AssignedEmployees = new List<Employee> { employee }; 
+                    var tEmployee = new TaskEmployee(employee.Credentials, employee.Accesses, employee.TelegramId);
+                    taskForUpdate.AssignedEmployees = new List<TaskEmployee> {tEmployee  }; 
                     
                     _unitOfCookie.WorkTaskRepository.Update(x => x.Id == task.Id, taskForUpdate.Convert());
                     _unitOfCookie.WorkTaskRepository.SaveChanges();
