@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WPFUI.Models
 {
@@ -13,12 +14,12 @@ namespace WPFUI.Models
         {
             Name = name;
         }
-        public WorkTask(DateTime started, DateTime finished, List<Pause> pausesList, Employee assignedEmployee, TaskState currentState, List<Address> addresses, string name, List<Access> assignedEmployeesAccesses)
+        public WorkTask(DateTime started, DateTime finished, List<Pause> pausesList, List<Employee> assignedEmployeeses, TaskState currentState, List<Address> addresses, string name, List<Access> assignedEmployeesAccesses)
         {
             Started = started;
             Finished = finished;
             PausesList = pausesList;
-            AssignedEmployee = assignedEmployee;
+            AssignedEmployees = assignedEmployeeses;
             CurrentState = currentState;
             Addresses = addresses;
             Name = name;
@@ -30,7 +31,7 @@ namespace WPFUI.Models
         public DateTime Started { get; set; }
         public DateTime Finished { get; set; }
         public List<Pause> PausesList { get; set; }
-        public Employee AssignedEmployee { get; set; }
+        public List<Employee> AssignedEmployees { get; set; }
         public List<Access> AssignedEmployeesAccesses { get; set; }
         public List<Address> Addresses { get; set; }
         public TaskState CurrentState { get; set; }
@@ -69,7 +70,7 @@ namespace WPFUI.Models
             }
         }
 
-        public string EmployeeWPF => AssignedEmployee == null ? "" : AssignedEmployee.Credentials;
+        public string EmployeeWPF => AssignedEmployees == null||AssignedEmployees.Count==0 ? "" : AssignedEmployees.First().Credentials;
 
         public string AccessWPF => AssignedEmployeesAccesses==null || AssignedEmployeesAccesses.Count == 0 ? "" : AssignedEmployeesAccesses.First().Name;
 
@@ -117,6 +118,18 @@ namespace WPFUI.Models
                     _ => throw new ArgumentOutOfRangeException(message: "Неможливо визначити поточний стан завдання",
                         new InvalidOperationException("CurrentStateWPF, впихнуте значення виходить за межі діапазону"))
                 };
+            }
+        }
+
+        public Visibility AssignFinishState
+        {
+            get
+            {
+                if (CurrentState==TaskState.Finished)
+                {
+                    return Visibility.Hidden;
+                }
+                return Visibility.Visible;
             }
         }
     }

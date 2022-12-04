@@ -33,6 +33,10 @@ namespace WPFUI.ExtentionMethods
 
         internal static DatabaseBroker.Models.Employee Convert(this WPFUI.Models.Employee employee)
         {
+            if (employee == null)
+                return new DatabaseBroker.Models.Employee();
+            
+
             return new DatabaseBroker.Models.Employee{Accesses = employee.Accesses.ConvertToDatabaseAcesses(),Credentials = employee.Credentials,Id = employee.Id,TelegramID = employee.TelegramId};
         }
 

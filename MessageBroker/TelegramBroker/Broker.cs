@@ -41,16 +41,16 @@ namespace MessageBroker.TelegramBroker
             set => bot.OnExceptionAction = value;
         }
 
-        public void SendTask(int taskId, long chatId, string address, 
-            Action onTaskRecived,Action onTaskStarted,Action onTaskFinished,Action onTaskCanceled)
+        public void SendTask(int taskId,string name, long chatId, string address, 
+            Action<int> onTaskRecived,Action<int> onTaskStarted,Action<int> onTaskFinished,Action<int> onTaskCanceled)
         {
             TryStartBot();
             var actionHolder = new ActionHolder(onTaskRecived,onTaskStarted,onTaskFinished,onTaskCanceled);
-            var task = new UserTask(taskId,MagicBox.Instance.GetUserByChatId(chatId),address,TaskState.Assigned,actionHolder);
+            var task = new UserTask(taskId,MagicBox.Instance.GetUserByChatId(chatId),address,TaskState.Assigned,actionHolder,name);
 
             MagicBox.Instance.SetBotInstance(bot);
             MagicBox.Instance.ProcessTask(task);
-            onTaskRecived.Invoke();
+            //onTaskRecived.Invoke(taskId);
         }
 
         private void TryStartBot()

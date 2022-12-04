@@ -9,7 +9,6 @@ using MessageBroker.TelegramBroker.User.Tasks;
 using MessageBroker.TelegramBroker.User.User;
 using Microsoft.VisualBasic;
 using Telegram.Bot.Types.ReplyMarkups;
-using TaskState = DatabaseBroker.Models.TaskState;
 
 namespace MessageBroker.TelegramBroker
 {
@@ -18,7 +17,7 @@ namespace MessageBroker.TelegramBroker
         private static UnitOfCookie _unitOfCookie;
         private static MagicBox wrapper;
         private static bool _isInitialized = false;
-        private List<OrdinaryUser> users = new();
+        private List<OrdinaryUser> _users = new();
         private static OrdinaryUser Engineer;
         private List<UserTask> _tasks = new();
         public MagicBox()
@@ -31,7 +30,7 @@ namespace MessageBroker.TelegramBroker
 
         public void SetUsers(List<OrdinaryUser> users)
         {
-            this.users = users;
+            _users = users;
         }
         public static MagicBox Instance
         {
@@ -62,9 +61,9 @@ namespace MessageBroker.TelegramBroker
 
         public RoleEnum GetRoleChatById(long chatId)
         {
-            if (users.Exists(x => x.ChatId == chatId))
+            if (_users.Exists(x => x.ChatId == chatId))
             {
-                return users.Find(x => x.ChatId == chatId)!.Role;
+                return _users.Find(x => x.ChatId == chatId)!.Role;
             }
 
             Console.WriteLine("Current user not exist! On GetRoleChatById");
@@ -79,7 +78,7 @@ namespace MessageBroker.TelegramBroker
             }
 
             return
-                users.Exists(x =>
+                _users.Exists(x =>
                     x.ChatId == chatId); //_unitOfCookie.EmployeeRepository.GetAll().Exists(x => x.TelegramID== chatId);
         }
 
@@ -97,14 +96,14 @@ namespace MessageBroker.TelegramBroker
 
         public InlineKeyboardMarkup GetKeyboardMarkupByChatId(long chatId)
         {
-            return IsExistInDb(chatId) ? users.Find(x => x.ChatId == chatId)!.KeyboardMarkup : MagicBox.Instance.GetKeyboardMarkupByRole(RoleEnum.Client);
+            return IsExistInDb(chatId) ? _users.Find(x => x.ChatId == chatId)!.KeyboardMarkup : MagicBox.Instance.GetKeyboardMarkupByRole(RoleEnum.Client);
         }
 
         public string GetDefaultIntroByChatId(long chatId)
         {
             if (IsExistInDb(chatId))
             {
-                return GetIntroByRole(users.Find(x => x.ChatId == chatId)!.Role);
+                return GetIntroByRole(_users.Find(x => x.ChatId == chatId)!.Role);
             }
 
             return GetIntroByRole(RoleEnum.Client);
@@ -130,13 +129,13 @@ namespace MessageBroker.TelegramBroker
         public string GetStatOfFreeEmployees()
         {
             return (_unitOfCookie.EmployeeRepository.Count() - _unitOfCookie.WorkTaskRepository.GetAll()
-                .Count(x => x.CurrentState == TaskState.Started)).ToString();
+                .Count(x => x.CurrentState == (DatabaseBroker.Models.TaskState)TaskState.Started)).ToString();
 
         }
 
         public string GetStatOfPowerGridProblems()
         {
-            return _unitOfCookie.WorkTaskRepository.GetAll().Count(x => x.CurrentState == TaskState.Started).ToString();
+            return _unitOfCookie.WorkTaskRepository.GetAll().Count(x => x.CurrentState == (DatabaseBroker.Models.TaskState)TaskState.Started).ToString();
 
         }
 
@@ -147,7 +146,7 @@ namespace MessageBroker.TelegramBroker
                 Role = RoleEnum.Engineer,
                 KeyboardMarkup = GetKeyboardMarkupByRole(RoleEnum.Engineer)
             };
-            users.Add(Engineer);
+            _users.Add(Engineer);
         }
 
         private InlineKeyboardMarkup GetKeyboardMarkupByRole(RoleEnum role)
@@ -222,18 +221,18 @@ namespace MessageBroker.TelegramBroker
 
         public OrdinaryUser GetUserByChatId(long chatId)
         {
-            if (users.Exists(x=>x.ChatId==chatId))
+            if (_users.Exists(x=>x.ChatId==chatId))
             {
-                return users.Find(x => x.ChatId == chatId);
+                return _users.Find(x => x.ChatId == chatId);
             }
 
             return null;
         }
 
-        private Bot bot;
+        private Bot _bot;
         public void SetBotInstance(Bot bot)
         {
-            this.bot = bot;
+            _bot = bot;
         }
         public void ProcessTask(UserTask task)
         {
@@ -242,14 +241,41 @@ namespace MessageBroker.TelegramBroker
                 //We need deliver it, after onRecive action
                 //after we need trace all user interaction and make corresponding(відповідні) actions
                 _tasks.Add(task);
-                bot.SendTaskToElectrician(task.Id, "Виникла наступна проблема:\n" +
-                                                   task.Name +
-                                                   "За адресою: "+task.Address);
+                _bot.SendTaskToElectrician(task);
             }
             else
             {
                 throw new InvalidOperationException("Cannot process not assigned task\nTask ID:"+task.Id+"\nTask state: "+task.TaskState);
             }
+        }
+
+        public void ProcessTaskChange(long chatId, TaskState taskState)
+        {
+            if (_users.Exists(x=>x.ChatId==chatId)&&_tasks.Exists(x=>x.User.ChatId==chatId))
+            {
+                switch (taskState)
+                {
+                    case TaskState.Recived:
+                        _tasks.Find(x=>x.User.ChatId==chatId).ActionHolder.OnTaskRecived.Invoke(_tasks.Find(x => x.User.ChatId == chatId).Id);
+                        break;
+                    case TaskState.Started:
+                        _tasks.Find(x=>x.User.ChatId==chatId).ActionHolder.OnTaskStarted.Invoke(_tasks.Find(x => x.User.ChatId == chatId).Id);
+                        break;
+                    case TaskState.Finished:
+                        _tasks.Find(x=>x.User.ChatId==chatId).ActionHolder.OnTaskFinished.Invoke(_tasks.Find(x => x.User.ChatId == chatId).Id);
+                        break;
+                    case TaskState.Canceled:
+                        _tasks.Find(x=>x.User.ChatId==chatId).ActionHolder.OnTaskCanceled.Invoke(_tasks.Find(x => x.User.ChatId == chatId).Id);
+                        break;
+                    default:
+                        throw new InvalidOperationException("Cannot process task state change, ID: " + chatId + "\tState: " + Enum.GetName(typeof(TaskState), taskState));
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Cannot process task state change, ID: "+chatId+"\tState: "+Enum.GetName(typeof(TaskState),taskState));
+            }
+
         }
     }
 }

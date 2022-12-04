@@ -21,14 +21,14 @@ namespace WPFUI.ExtentionMethods
         {
             if (tasks == null)
                 return new List<WorkTask>();
-            return (from task in tasks select new WPFUI.Models.WorkTask(task.Started, task.Finished, task.PausesList.Convert(), task.AssignedEmployee.Convert(), (TaskState)(int)task.CurrentState, task.Addresses.ConvertToWPFAddress(), task.Name, task.AssignedEmployeesAccesses.Convert()) { Id = task.Id }).ToList();
+            return (from task in tasks select new WPFUI.Models.WorkTask(task.Started, task.Finished, task.PausesList.Convert(), task.AssignedEmployees.Convert(), (TaskState)(int)task.CurrentState, task.Addresses.ConvertToWPFAddress(), task.Name, task.AssignedEmployeesAccesses.Convert()) { Id = task.Id }).ToList();
         }
         public static DatabaseBroker.Models.WorkTask Convert(this WPFUI.Models.WorkTask task)
         {
             return new DatabaseBroker.Models.WorkTask() {Started = task.Started,
                Finished = task.Finished,
                PausesList = task.PausesList.Convert(),
-               AssignedEmployee = task.AssignedEmployee.Convert(), 
+               AssignedEmployees = task.AssignedEmployees.Convert(), 
                CurrentState = (DatabaseBroker.Models.TaskState)(int)task.CurrentState, 
                Addresses = task.Addresses.ConvertToDatabaseAddress(), 
                Name = task.Name, 
@@ -37,7 +37,7 @@ namespace WPFUI.ExtentionMethods
         public static WPFUI.Models.WorkTask Convert(this DatabaseBroker.Models.WorkTask task)
         {
             TaskState currentState = (TaskState)((int)task.CurrentState);
-            return new WPFUI.Models.WorkTask(task.Started,task.Finished,task.PausesList.Convert(),task.AssignedEmployee.Convert(), currentState, task.Addresses.ConvertToWPFAddress(),task.Name,task.AssignedEmployeesAccesses.Convert()) { Id = task.Id };
+            return new WPFUI.Models.WorkTask(task.Started,task.Finished,task.PausesList.Convert(),task.AssignedEmployees.Convert(), currentState, task.Addresses.ConvertToWPFAddress(),task.Name,task.AssignedEmployeesAccesses.Convert()) { Id = task.Id };
         }
     }
 }

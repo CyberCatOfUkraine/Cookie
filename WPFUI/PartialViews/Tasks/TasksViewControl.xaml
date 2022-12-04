@@ -23,7 +23,9 @@
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Click="AssignEmployeeBtn_OnClick">Призначити/Перепризначити</Button>
+                            <Button VerticalAlignment="Center" HorizontalAlignment="Center" Click="AssignEmployeeBtn_OnClick"
+                                    Visibility="{Binding Path=AssignFinishState}"
+                                    >Призначити/Перепризначити</Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

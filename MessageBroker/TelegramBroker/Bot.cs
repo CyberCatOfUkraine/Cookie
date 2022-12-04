@@ -5,6 +5,7 @@ using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using MessageBroker.TelegramBroker.User;
+using MessageBroker.TelegramBroker.User.Tasks;
 using MessageBroker.TelegramBroker.User.User;
 using Telegram.Bot.Types;
 using Telegram.Bot;
@@ -109,6 +110,37 @@ namespace MessageBroker.TelegramBroker
                  *
                  *
                  */
+                if (update.CallbackQuery.Data == BotStrings.TaskRecieved)
+                {
+                    MagicBox.Instance.ProcessTaskChange(chatId, TaskState.Recived);
+                    await botClient.SendTextMessageAsync(chatId, "Отримання зафіксовано",
+                        cancellationToken: cancellationToken,
+                        replyMarkup: KeyboardMarkups.StartTaskMarkup);
+                    return;
+                }
+                if (update.CallbackQuery.Data == BotStrings.TaskStarted)
+                {
+                    MagicBox.Instance.ProcessTaskChange(chatId, TaskState.Started);
+                    await botClient.SendTextMessageAsync(chatId, "Початок роботи зафіксовано",
+                        cancellationToken: cancellationToken,
+                        replyMarkup: KeyboardMarkups.FinishedTaskMarkup);
+                    return;
+                }
+                if (update.CallbackQuery.Data == BotStrings.TaskFinished)
+                {
+                    MagicBox.Instance.ProcessTaskChange(chatId, TaskState.Finished);
+                    await botClient.SendTextMessageAsync(chatId, "Завершення роботи зафіксовано",
+                        cancellationToken: cancellationToken,
+                        replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
+                    return;
+                }
+                if (update.CallbackQuery.Data == BotStrings.TaskCanceled)
+                {
+                    MagicBox.Instance.ProcessTaskChange(chatId, TaskState.Canceled);
+                    await botClient.SendTextMessageAsync(chatId, "Скасування роботи зафіксовано",
+                        cancellationToken: cancellationToken,
+                        replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
+                }
 
             }
         }
@@ -152,13 +184,14 @@ namespace MessageBroker.TelegramBroker
                     MagicBox.Instance.TryGetCredentialsById(telegramId));
             }
         }
-        public async void SendTaskToElectrician(long telegramId, string message)
+        public async void SendTaskToElectrician(UserTask task)//(long telegramId, string message)
         {
             try
             {
-                if (MagicBox.Instance.GetCurrentTaskId(telegramId)!=-1)
+               var message= "Виникла наступна проблема:\n" + task.Name + "За адресою: " + task.Address;
+                if (MagicBox.Instance.GetCurrentTaskId(task.User.ChatId)!=-1)
                 {
-                    await _botClient.SendTextMessageAsync(telegramId, message,replyMarkup:KeyboardMarkups.GetTaskRecievedMarkup);
+                    await _botClient.SendTextMessageAsync(task.User.ChatId, message,replyMarkup:KeyboardMarkups.GetTaskRecievedMarkup);
                 }
                 else
                 {
@@ -168,9 +201,9 @@ namespace MessageBroker.TelegramBroker
             catch (Exception e)
             {
                 OnExceptionAction.Invoke(e,
-                    MagicBox.Instance.GetRoleChatById(telegramId) == RoleEnum.Engineer,
-                    MagicBox.Instance.GetRoleChatById(telegramId) == RoleEnum.Electrician, 
-                    MagicBox.Instance.TryGetCredentialsById(telegramId));
+                    MagicBox.Instance.GetRoleChatById(task.User.ChatId) == RoleEnum.Engineer,
+                    MagicBox.Instance.GetRoleChatById(task.User.ChatId) == RoleEnum.Electrician, 
+                    MagicBox.Instance.TryGetCredentialsById(task.User.ChatId));
             }
         }
         public Action<Exception,bool,bool,string> OnExceptionAction;

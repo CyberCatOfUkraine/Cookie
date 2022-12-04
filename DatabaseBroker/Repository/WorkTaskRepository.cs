@@ -44,7 +44,7 @@ namespace DatabaseBroker.Repository
             _context.Entry(workTask).Entity.Started = item.Started;
             _context.Entry(workTask).Entity.Finished = item.Finished;
             _context.Entry(workTask).Entity.PausesList = item.PausesList;
-            _context.Entry(workTask).Entity.AssignedEmployee = item.AssignedEmployee;
+            _context.Entry(workTask).Entity.AssignedEmployees = item.AssignedEmployees;
             _context.Entry(workTask).Entity.AssignedEmployeesAccesses = item.AssignedEmployeesAccesses;
             _context.Entry(workTask).Entity.Addresses = item.Addresses;
             _context.Entry(workTask).Entity.CurrentState = item.CurrentState;
