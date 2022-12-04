@@ -277,5 +277,35 @@ namespace MessageBroker.TelegramBroker
             }
 
         }
+
+        public string GetProblemByAddress(string? messageText)
+        {
+            var problemExist = "На вулиці за введеною адресою знаходиться співробітник що вже вирішує проблему";
+            var problemNotExist = "За введеною адресою нічого не знайдено";
+
+            var result = problemNotExist;
+            foreach (var task in _unitOfCookie.WorkTaskRepository.GetAll())
+            {
+                var addressString = new StringBuilder();
+                addressString.Append(task.Addresses.First().Region + ",");
+                addressString.Append(task.Addresses.First().District + ",");
+                addressString.Append(task.Addresses.First().Settlement + ",");
+                addressString.Append(task.Addresses.First().Street + ",");
+                addressString.Append(task.Addresses.First().House);
+                if (!string.IsNullOrEmpty(task.Addresses.First().Apartment))
+                {
+                    addressString.Append("," + task.Addresses.First().Apartment);
+                }
+
+                var addressIsCorect = addressString.ToString().ToLower().Contains(messageText.ToLower()) ||
+                                       addressString.ToString().ToLower().Equals(messageText.ToLower());
+                if (addressIsCorect)
+                {
+                    result = problemExist;
+                }
+            }
+
+            return result;
+        }
     }
 }

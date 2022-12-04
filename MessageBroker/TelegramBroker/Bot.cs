@@ -24,6 +24,7 @@ namespace MessageBroker.TelegramBroker
             _botClient = new TelegramBotClient(TokenLoader.Token);
         }
 
+        private List<long> _usersQuestionList = new();
         public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
             CancellationToken cancellationToken)
         {
@@ -41,7 +42,7 @@ namespace MessageBroker.TelegramBroker
                     {
                         //TODO:Check for acceptable id and give the message
                         await botClient.SendTextMessageAsync(message.Chat,
-                            "Привіт!\n(На даний момент вся взаємодія з ботом відбувається за допомогою кнопок)",
+                            $"Привіт!\n(На даний момент вся взаємодія з ботом відбувається за допомогою кнопок, ваш TelegramID:{chatId})",
                             cancellationToken: cancellationToken);
                         await botClient.SendTextMessageAsync(message.Chat,
                             MagicBox.Instance.GetDefaultIntroByChatId(chatId),
@@ -52,8 +53,18 @@ namespace MessageBroker.TelegramBroker
                     {
                         #region Invalid input
 
-                        await botClient.SendTextMessageAsync(chatId, BotStrings.InvalidInput,
-                            cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);
+                        if (_usersQuestionList.Exists(x=>x==chatId))
+                        {
+                            _usersQuestionList.Remove(chatId);
+                            await botClient.SendTextMessageAsync(chatId, MagicBox.Instance.GetProblemByAddress(message.Text),
+                                cancellationToken: cancellationToken, replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
+                        }
+                        else
+                        {
+                            await botClient.SendTextMessageAsync(chatId, BotStrings.InvalidInput,
+                                cancellationToken: cancellationToken, replyMarkup: KeyboardMarkups.InvalidInput);
+                        }
+                        
 
                         #endregion
                     }
@@ -88,28 +99,6 @@ namespace MessageBroker.TelegramBroker
                         cancellationToken: cancellationToken,
                         replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
                 }
-                /*if (update.CallbackQuery.Data == BotStrings.StatOfPowerGridProblems)
-                {
-                    await botClient.SendTextMessageAsync(chatId, "Кількість проблем що вирішується: " +
-                                                                 magicBox.GetStatOfPowerGridProblems(),
-                        cancellationToken: cancellationToken,
-                        replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
-                }*/
-                /*if (update.CallbackQuery.Data == BotStrings.AvailableOperationsList)
-                {
-                    await botClient.SendTextMessageAsync(chatId, magicBox.GetOperationById(chatId),
-                        cancellationToken: cancellationToken,
-                        replyMarkup: magicBox.GetKeyboardMarkupByChatId(chatId));
-                }*/
-                /*
-                 *
-                 *
-                 *Опрацювати кожен пункт роботи електрика, взаємодія через MagickBox
-                 *
-                 *
-                 *
-                 *
-                 */
                 if (update.CallbackQuery.Data == BotStrings.TaskRecieved)
                 {
                     MagicBox.Instance.ProcessTaskChange(chatId, TaskState.Recived);
@@ -148,6 +137,13 @@ namespace MessageBroker.TelegramBroker
                         cancellationToken: cancellationToken,
                         replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
                 }
+                if (update.CallbackQuery.Data == BotStrings.CheckForProblems)
+                {
+                    _usersQuestionList.Add(chatId);
+                    await botClient.SendTextMessageAsync(chatId, "Введіть адресу\n(розділяючи область, район, населений пункт, вулицю, будинок та квартиру комами)",
+                        cancellationToken: cancellationToken);
+                }
+                
 
             }
         }
@@ -195,7 +191,7 @@ namespace MessageBroker.TelegramBroker
         {
             try
             {
-               var message= "Виникла наступна проблема:\n" + task.Name + "За адресою: " + task.Address;
+               var message= "Виникла наступна проблема:    " + task.Name + "За адресою: " + task.Address;
                 if (MagicBox.Instance.GetCurrentTaskId(task.User.ChatId)!=-1)
                 {
                     await _botClient.SendTextMessageAsync(task.User.ChatId, message,replyMarkup:KeyboardMarkups.GetTaskRecievedMarkup);
