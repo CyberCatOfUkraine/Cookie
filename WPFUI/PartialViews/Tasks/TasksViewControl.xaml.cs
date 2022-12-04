@@ -129,6 +129,7 @@ namespace WPFUI.PartialViews
                     _unitOfCookie.WorkTaskRepository.SaveChanges();
 
                     TryUpdateDataGrid();
+                    MessageBox.Show("Задачу призначено вільного співробітника");
                 }
                 else
                 {
@@ -141,25 +142,65 @@ namespace WPFUI.PartialViews
 
             if (task.CurrentState==TaskState.Canceled)
             {
-               /* if (task.AssignedEmployeesAccesses.Count==0)
+                if (task.AssignedEmployeesAccesses.Count == 0)
                 {
                     throw new InvalidOperationException("Assign employee denied, can't get access task");
                 }
                 var acess = task.AssignedEmployeesAccesses[0];
-
-                if (_unitOfCookie.EmployeeRepository.GetAll().Exists(x => x.Accesses.Exists(x => x.Name == acess.Name)))
+                if (_unitOfCookie.EmployeeRepository.GetAll().Exists(x => x.Accesses.Exists(x => x.Name == acess.Name)
+                                                                          &&!AssignedUserIdList.Exists(k=>k.Equals(x.Id))))
                 {
+                    var employeesDbId = from employeeDb in _unitOfCookie.EmployeeRepository.GetAll()
+                                        where
+                                            employeeDb.Accesses.Exists(x => x.Name == acess.Name)
+                                        select employeeDb.Id;
+                    var assignedEmployees = employeesDbId.Except(AssignedUserIdList);
+                        var employees =assignedEmployees.Where(x=>x!=task.AssignedEmployees.First().Id);
+                    Employee employee;
+                    if (employees.Any())
+                    {
+                        employee = _unitOfCookie.EmployeeRepository.Get(x => x.Id == employees.First()).Convert();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Немає вільних співробітників, очікуйте");
+                        return;
+                    }
 
+                    var addressString = new StringBuilder();
+                    addressString.Append(task.Addresses.First().Region + ", ");
+                    addressString.Append(task.Addresses.First().District + ", ");
+                    addressString.Append(task.Addresses.First().Settlement + ", ");
+                    addressString.Append(task.Addresses.First().Street + ", ");
+                    addressString.Append(task.Addresses.First().House);
+                    if (!string.IsNullOrEmpty(task.Addresses.First().Apartment))
+                    {
+                        addressString.Append("," + task.Addresses.First().Apartment);
+                    }
+                    _broker.SendTask(task.Id, task.Name, employee.TelegramId, addressString.ToString(), onTaskRecived,
+                        onTaskReStarted, onTaskFinished, onTaskCanceled);
+                    AssignedUserIdList.Add(task.Id);
+
+                    var taskForUpdate = _tasks.Find(x => x.Id == task.Id);
+                    taskForUpdate.CurrentState = TaskState.Assigned;
+                    var tEmployee = new TaskEmployee(employee.Credentials, employee.Accesses, employee.TelegramId);
+                    taskForUpdate.AssignedEmployees = new List<TaskEmployee> { tEmployee };
+
+                    _unitOfCookie.WorkTaskRepository.Update(x => x.Id == task.Id, taskForUpdate.Convert());
+                    _unitOfCookie.WorkTaskRepository.SaveChanges();
+
+                    TryUpdateDataGrid();
+                    MessageBox.Show("Задачу перепризначено  на вільного співробітника ");
                 }
-                //var employee = _unitOfCookie.EmployeeRepository.Get(x => x.Accesses.Exists(x => x.Name == acess.Name));
-                var addressString = new StringBuilder();
-                //тут робимо перевірку на присутність ще одного користувача, якщо є то видаляємо старого, нема то ексепшин
-                _broker.SendTask(task.Id,task.Name,employee.TelegramID,addressString.ToString(),onTaskRecived,onTaskStarted,onTaskFinished,onTaskCanceled);*/
+                else
+                {
+                    MessageBox.Show(
+                        "Не знайдено співробітника якому можна було б призначити завдання з даним допуском");
+                    return;
+                }
             }
 
-            /*MessageBox.Show(new Random().Next(-2, 2) > 0
-                ? "Задачу призначено вільного співробітника"
-                : "Задачу перепризначено  на вільного співробітника ");*/
+            
         }
 
         private void onTaskRecived(int taskId)
@@ -182,6 +223,18 @@ namespace WPFUI.PartialViews
             var task = _unitOfCookie.WorkTaskRepository.Get(x => x.Id == taskId);
             task.CurrentState = (DatabaseBroker.Models.TaskState)TaskState.Started;
             task.Started = DateTime.Now;
+            _unitOfCookie.WorkTaskRepository.Update(x => x.Id == taskId, task);
+            _unitOfCookie.WorkTaskRepository.SaveChanges();
+
+        }
+        private void onTaskReStarted(int taskId)
+        {
+            _tasks.Find(x => x.Id == taskId).CurrentState = TaskState.Started;
+            _tasks.Find(x => x.Id == taskId).Started = DateTime.Now;
+
+            TryUpdateDataGrid();
+            var task = _unitOfCookie.WorkTaskRepository.Get(x => x.Id == taskId);
+            task.CurrentState = (DatabaseBroker.Models.TaskState)TaskState.Started;
             _unitOfCookie.WorkTaskRepository.Update(x => x.Id == taskId, task);
             _unitOfCookie.WorkTaskRepository.SaveChanges();
 
