@@ -141,6 +141,13 @@ namespace MessageBroker.TelegramBroker
                         cancellationToken: cancellationToken,
                         replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
                 }
+                if (update.CallbackQuery.Data == BotStrings.NewTaskAvailability)
+                {
+                    MagicBox.Instance.ProcessTaskChange(chatId, TaskState.Canceled);
+                    await botClient.SendTextMessageAsync(chatId, "На цей момент доступних задач не виявлено.",
+                        cancellationToken: cancellationToken,
+                        replyMarkup: KeyboardMarkups.ElectricianKeyboardMarkup);
+                }
 
             }
         }
